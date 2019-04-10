@@ -17,11 +17,11 @@ class CreateUsersTable extends Migration
             $table->increments('id_user');
             $table->string('nama');
             $table->string('username',20)->unique();
-            $table->string('email',254)->unique();
+            $table->string('email',150)->unique();
             $table->string('password');
             $table->unsignedInteger('id_peran');
             $table->foreign('id_peran')->references('id_peran')->on('peran')->onDelete('cascade');
-            $table->boolean('flag_active')->nullable()->default(false);
+            $table->boolean('flag_active')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
         });
