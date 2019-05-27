@@ -18,14 +18,11 @@ class CreateModalsTable extends Migration
             $table->float('nominal')->nullable();
 
             $table->dateTime('added_at')->nullable();
-            $table->integer('added_by')->unsigned()->nullable();
-            $table->foreign('added_by')->references('id_user')->on('users');
+            $table->integer('added_by');
             
             $table->dateTime('updated_at')->nullable();
-            $table->integer('updated_by')->unsigned()->nullable();
-            $table->foreign('updated_by')->references('id_user')->on('users');
-            
-            $table->boolean('flag_active')->nullable();
+            $table->integer('updated_by');
+            $table->enum('flag_active', ['0', '1']);
         });
     }
 

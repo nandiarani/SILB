@@ -15,21 +15,18 @@ class CreateTrnPengeluaransTable extends Migration
     {
         Schema::create('trn_pengeluaran', function (Blueprint $table) {
             $table->increments('id_pengeluaran');
-            $table->unsignedInteger('id_jenis_pengeluaran');
-            $table->foreign('id_jenis_pengeluaran')->references('id_jenis_pengeluaran')->on('jenis_pengeluaran')->onDelete('cascade');
+            $table->integer('id_jenis_pengeluaran');
             $table->integer('jumlah')->unsigned()->nullable();
             $table->float('harga_satuan')->nullable();
             $table->float('total')->nullable();
 
             $table->dateTime('added_at')->nullable();
-            $table->integer('added_by')->unsigned()->nullable();
-            $table->foreign('added_by')->references('id_user')->on('users');
+            $table->integer('added_by');
             
             $table->dateTime('updated_at')->nullable();
-            $table->integer('updated_by')->unsigned()->nullable();
-            $table->foreign('updated_by')->references('id_user')->on('users');
-            
-            $table->boolean('flag_active')->nullable();
+            $table->integer('updated_by');
+
+            $table->enum('flag_active', ['0', '1']);
         });
     }
 

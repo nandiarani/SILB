@@ -16,7 +16,7 @@ class CreateJenisPengeluaransTable extends Migration
         Schema::create('jenis_pengeluaran', function (Blueprint $table) {
             $table->increments('id_jenis_pengeluaran');
             $table->string('jenis_pengeluaran');
-            $table->boolean('flag_active')->nullable()->default(false);
+            $table->enum('flag_active', ['0', '1']);
             $table->timestamps();
         });
     }

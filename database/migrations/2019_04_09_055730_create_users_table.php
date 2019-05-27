@@ -19,10 +19,11 @@ class CreateUsersTable extends Migration
             $table->string('username',20)->unique();
             $table->string('email',150)->unique();
             $table->string('password');
-            $table->unsignedInteger('id_peran');
-            $table->foreign('id_peran')->references('id_peran')->on('peran')->onDelete('cascade');
-            $table->boolean('flag_active')->nullable();
+            $table->integer('id_peran');
+            $table->enum('role', ['owner', 'employee']);
+            $table->enum('flag_active', ['0', '1']);
             $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Jenis_Pengeluaran extends Model
+class Trn_Pengeluaran extends Model
 {
     //
 }
