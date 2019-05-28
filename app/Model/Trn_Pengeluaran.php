@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Trn_Pengeluaran extends Model
 {
     //
+    protected $table='trn_pengeluaran';
+    protected $fillable=['id_pengeluaran','id_jenis_pengeluaran','jumlah','harga_satuan','total','added_at','added_by','updated_at','updated_by','flag_active'];
 }
