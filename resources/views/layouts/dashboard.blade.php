@@ -9,7 +9,7 @@
 
     {{-- icon --}}
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('../assets/image/favicon.png')}}">
-    
+
     {{-- Style --}}
     <link href="{{asset('../assets/node_modules/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('../assets/node_modules/perfect-scrollbar/css/perfect-scrollbar.css')}}" rel="stylesheet">
@@ -22,7 +22,7 @@
     {{-- script --}}
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    
+
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -37,13 +37,15 @@
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">
-                            <img src="{{asset('assets/image/logo-icon.png')}}" alt="homepage" class="dark-logo" />
-                            <img src="{{asset('assets/image/logo-light-icon.png')}}" alt="homepage" class="light-logo" />
-                            <img src="{{asset('assets/image/logo-text.png')}}" alt="homepage" class="dark-logo" />
-                            <img src="{{asset('assets/image/logo-light-text.png')}}" class="light-logo" alt="homepage" /></span>
+                        <img src="{{asset('assets/image/logo-icon.png')}}" alt="homepage" class="dark-logo" />
+                        <img src="{{asset('assets/image/logo-light-icon.png')}}" alt="homepage" class="light-logo" />
+                        <img src="{{asset('assets/image/logo-text.png')}}" alt="homepage" class="dark-logo" />
+                        <img src="{{asset('assets/image/logo-light-text.png')}}" class="light-logo"
+                            alt="homepage" /></span>
                     </a>
                 </div>
                 <div class="navbar-collapse">
+                    {{--  search  --}}
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
                                 href="javascript:void(0)"><i class="fa fa-bars"></i></a> </li>
@@ -55,11 +57,14 @@
                                     class="srh-btn"><i class="fa fa-times"></i></a></form>
                         </li>
                     </ul>
+                    {{--  profile  --}}
                     <ul class="navbar-nav my-lg-0">
-                        <li class="nav-item dropdown u-pro">
+                        <li class="nav-item dropdown u-pro" id="profile-dropdown">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href=""
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
-                                    class="hidden-md-down">{{ Auth::user()->username }}</span> </a>
+                                    class="hidden-md-down">{{ Auth::user()->username }}</span><span
+                                    style="padding-left:10px;"><img src="{{asset('assets/icon/down-arrow.png')}}"
+                                        alt="arrowdown" style="height:22px;width:23px;"></span></a>
                         </li>
                     </ul>
                 </div>
@@ -92,18 +97,17 @@
                                     class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
+                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                               document.getElementById('logout-form').submit();">
-                                 {{ __('Logout') }}
-                             </a>
-                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
+                                {{ __('Logout') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </li>
                 </nav>
             </div>
-            
+
         </aside>
         <div class="page-wrapper">
             <div class="container-fluid">
@@ -119,26 +123,32 @@
                 </div>
                 {{-- BREAD CRUMB END --}}
                 {{-- CONTENT HERE --}}
-                <p>TEST</p>
-                {{-- CONTENT END --}}
                 @yield('contents')
+                {{-- CONTENT END --}}
                 {{-- FOOTER START --}}
-            <footer class="footer"> © 2018 Adminwrap by wrappixel.com </footer>
+                <footer class="footer"> © 2018 Adminwrap by wrappixel.com </footer>
                 {{-- FOOTER END --}}
+            </div>
         </div>
-    </div>
-    {{-- JQUERY AND JS HERE --}}
-    <script src="{{asset('../assets/node_modules/jquery/jquery.min.js')}}"></script>
-    <script src="{{asset('../assets/node_modules/bootstrap/js/popper.min.js')}}"></script>
-    <script src="{{asset('../assets/node_modules/bootstrap/js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('js/perfect-scrollbar.jquery.min.js')}}"></script>
-    <script src="{{asset('js/waves.js')}}"></script>
-    <script src="{{asset('js/sidebarmenu.js')}}"></script>
-    <script src="{{asset('js/custom.min.js')}}"></script>
-    <script src="{{asset('../assets/node_modules/raphael/raphael-min.js')}}"></script>
-    <script src="{{asset('../assets/node_modules/morrisjs/morris.min.js')}}"></script>
-    <script src="{{asset('../assets/node_modules/d3/d3.min.js')}}"></script>
-    <script src="{{asset('../assets/node_modules/c3-master/c3.min.js')}}"></script>
-    <script src="{{asset('js/dashboard1.js')}}"></script>
+        {{-- JQUERY AND JS HERE --}}
+        <script src="{{asset('../assets/node_modules/jquery/jquery.min.js')}}"></script>
+        <script src="{{asset('../assets/node_modules/bootstrap/js/popper.min.js')}}"></script>
+        <script src="{{asset('../assets/node_modules/bootstrap/js/bootstrap.min.js')}}"></script>
+        <script src="{{asset('js/perfect-scrollbar.jquery.min.js')}}"></script>
+        <script src="{{asset('js/waves.js')}}"></script>
+        <script src="{{asset('js/sidebarmenu.js')}}"></script>
+        <script src="{{asset('js/custom.min.js')}}"></script>
+        <script src="{{asset('../assets/node_modules/raphael/raphael-min.js')}}"></script>
+        <script src="{{asset('../assets/node_modules/morrisjs/morris.min.js')}}"></script>
+        <script src="{{asset('../assets/node_modules/d3/d3.min.js')}}"></script>
+        <script src="{{asset('../assets/node_modules/c3-master/c3.min.js')}}"></script>
+        <script src="{{asset('js/dashboard1.js')}}"></script>
+        <script>
+            $(#profile - dropdown).click(function {
+
+            });
+
+        </script>
 </body>
+
 </html>
