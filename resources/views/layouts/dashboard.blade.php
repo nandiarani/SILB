@@ -59,12 +59,34 @@
                     </ul>
                     {{--  profile  --}}
                     <ul class="navbar-nav my-lg-0">
-                        <li class="nav-item dropdown u-pro" id="profile-dropdown">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href=""
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
-                                    class="hidden-md-down">{{ Auth::user()->username }}</span><span
-                                    style="padding-left:10px;"><img src="{{asset('assets/icon/down-arrow.png')}}"
-                                        alt="arrowdown" style="height:22px;width:23px;"></span></a>
+                        <li class="nav-item dropdown u-pro">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic"
+                                href="#profile-dropdown" data-toggle="dropdown" data-target="#profile-dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span class="hidden-md-down">{{ Auth::user()->username }}</span>
+                                <span style="padding-left:10px;"><img src="{{asset('assets/icon/down-arrow.png')}}"
+                                        alt="arrowdown" style="height:22px;width:23px;"></span>
+                            </a>
+                            <div class="panel-collapse collapse" id="profile-dropdown">
+                                <ul class="navbar-nav dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="#" onclick="#" style="font-size:15px;">
+                                            {{ __('Profile') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();" style="font-size:15px;">
+                                            {{ __('Logout') }}
+                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                        </form>
+                                    </li>   
+                                </ul>
+                            </div>
+                            
                         </li>
                     </ul>
                 </div>
@@ -95,15 +117,6 @@
                         </li>
                         <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i
                                     class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                              document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
                         </li>
                 </nav>
             </div>
