@@ -1446,10 +1446,11 @@ File: scss
 }
 
 .topbar .dropdown-menu {
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    /* box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
     -webkit-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05); */
     border-color: rgba(120, 130, 140, 0.13);
+    margin-top: 0%;
 }
 
 .topbar .dropdown-menu .dropdown-item {
@@ -1458,7 +1459,7 @@ File: scss
 
 .topbar ul.dropdown-user {
     padding: 0px;
-    /* min-width: 270px;  */
+    min-width: 270px;
 }
 
 .topbar ul.dropdown-user li {
