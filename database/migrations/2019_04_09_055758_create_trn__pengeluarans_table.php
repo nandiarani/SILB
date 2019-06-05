@@ -19,6 +19,8 @@ class CreateTrnPengeluaransTable extends Migration
             $table->integer('jumlah')->unsigned()->nullable();
             $table->float('harga_satuan')->nullable();
             $table->float('total')->nullable();
+            $table->dateTime('tanggal')->nullable();
+            
 
             $table->dateTime('added_at')->nullable();
             $table->integer('added_by')->nullable();

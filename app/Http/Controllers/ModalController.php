@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Modal;
+use App\Model\Modal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Auth;
 
 class ModalController extends Controller
 {
@@ -14,8 +17,15 @@ class ModalController extends Controller
      */
     public function index()
     {
-        //
+        $modal=DB::table('modal')->where('flag_active','=','1')->orderBy('added_at','desc')->paginate(5);
+        $i=1;
+        return view('modal',['modals'=>$modal,'i'=>$i]);
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
 
     /**
      * Show the form for creating a new resource.
@@ -25,6 +35,8 @@ class ModalController extends Controller
     public function create()
     {
         //
+        
+        return view('modal_create');
     }
 
     /**
@@ -36,6 +48,14 @@ class ModalController extends Controller
     public function store(Request $request)
     {
         //
+        // $modal= new \App\Model\Modal;
+        // $modal->nominal=request('nominal');
+        // $modal->tanggal=request('tanggal');
+        // $modal->added_at=Carbon::now()->toDateTimeString();
+        // $modal->added_by=Auth::user()->id_user;
+        // $modal->flag_active='1';
+        // $modal->save();
+        return redirect('/modal');
     }
 
     /**
@@ -57,7 +77,7 @@ class ModalController extends Controller
      */
     public function edit(Modal $modal)
     {
-        //
+        return view('modal_edit');
     }
 
     /**
