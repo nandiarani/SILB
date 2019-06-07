@@ -44,7 +44,7 @@ class ModalController extends Controller
      */
     public function store(Request $request)
     {
-        $modal= new \App\Model\Modal;
+        $modal= new Modal();
         $modal->nominal=request('nominal');
         $modal->tanggal=request('tanggal');
         $modal->added_at=Carbon::now()->toDateTimeString();

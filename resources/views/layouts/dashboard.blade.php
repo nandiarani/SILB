@@ -117,7 +117,7 @@
                             <span class="hide-menu" style="padding-left:10px;">Modal</span>
                         </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="{{route('jenis_pengeluaran.index')}}" aria-expanded="false"><i
                                     class="fa fa-bookmark-o"></i><span class="hide-menu">Jenis Pengeluaran</span></a>
                         </li>
                 </nav>

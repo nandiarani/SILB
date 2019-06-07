@@ -45,7 +45,7 @@ class MstTarifByUkuranController extends Controller
     public function store(Request $request)
     {
         //
-        $tarif= new \App\Model\Mst_Tarif_By_Ukuran;
+        $tarif= new Mst_Tarif_By_Ukuran();
         $tarif->ukuran=request('ukuran');
         $tarif->size_from_cm=request('uk_dari');
         $tarif->size_to_cm=request('uk_sampai');
