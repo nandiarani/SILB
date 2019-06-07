@@ -29,7 +29,7 @@
                     <div class="form-group">
                             <label class="col-md-12">Nominal</label>
                             <div class="col-md-12">
-                                <input type="number" name="nominal" placeholder="" class="form-control form-control-line" required>
+                                <input type="number" maxlength="20" name="nominal" placeholder="" class="form-control form-control-line uang" required>
                             </div>
                     </div>
                 <div class="form-group">
@@ -44,4 +44,11 @@
     </div>
 </div>
 
+@endsection
+@section('js')
+    {{--  <script type="text/javascript">
+        $(document).ready(function(){
+                $( '.uang' ).mask('000.000.000');
+        });
+    </script>  --}}
 @endsection

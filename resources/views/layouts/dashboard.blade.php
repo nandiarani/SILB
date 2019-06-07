@@ -153,6 +153,7 @@
         </div>
         {{-- JQUERY AND JS HERE --}}
         <script src="{{asset('../assets/node_modules/jquery/jquery.min.js')}}"></script>
+        <script src="{{asset('../assets/node_modules/jquery/jquery.mask.js')}}"></script>
         <script src="{{asset('../assets/node_modules/bootstrap/js/popper.min.js')}}"></script>
         <script src="{{asset('../assets/node_modules/bootstrap/js/bootstrap.min.js')}}"></script>
         <script src="{{asset('js/perfect-scrollbar.jquery.min.js')}}"></script>
@@ -164,12 +165,7 @@
         <script src="{{asset('../assets/node_modules/d3/d3.min.js')}}"></script>
         <script src="{{asset('../assets/node_modules/c3-master/c3.min.js')}}"></script>
         <script src="{{asset('js/dashboard1.js')}}"></script>
-        <script>
-            $(#profile - dropdown).click(function {
-
-            });
-
-        </script>
+        @yield('js')
 </body>
 
 </html>

@@ -1345,6 +1345,8 @@ File: scss
 .card .card-title {
     position: relative;
     font-weight: 500;
+    font-size: 200%;
+    margin: 20px 0px;
 }
 
 
@@ -2314,6 +2316,7 @@ Other comon js for all pages
 }
 
 .table-responsive {
+    margin-top: 70px;
     display: block;
     width: 100%;
     overflow-x: auto;
