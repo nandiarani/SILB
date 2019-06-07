@@ -19,7 +19,9 @@
 @section('contents')
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">Pengelolaan Jenis Pengeluaran</h4>
+            <div class="col md-12" style="border-bottom:2px solid #d5dae2;margin-bottom:15px;">
+                <h4 class="card-title">Pengelolaan Jenis Pengeluaran</h4>
+            </div>
         <a href="{{route('jenis_pengeluaran.create')}}" class="btn waves-effect waves-light btn btn-success pull-right hidden-sm-down">Tambah</a>
         <div class="table-responsive">
             @if (count($jenis_pengeluarans)===0)

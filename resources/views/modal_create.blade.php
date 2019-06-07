@@ -46,7 +46,7 @@
 
 @endsection
 @section('js')
-    {{--  <script type="text/javascript">
+     {{-- <script type="text/javascript">
         $(document).ready(function(){
                 $( '.uang' ).mask('000.000.000');
         });
