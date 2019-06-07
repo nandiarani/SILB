@@ -11,14 +11,14 @@
 @section('contents')
 <div class="row page-titles">
     <div class="col-md-5 align-self-center">
-        <h3 class="text-themecolor">Edit/Add Modal</h3>
+        <h3 class="text-themecolor">Tambah Modal</h3>
     </div>
 </div>
 
 <div class="col-md-7">
     <div class="card">
         <div class="card-body">
-            <form class="form-horizontal form-material" action="/modal" method="POST">
+            <form class="form-horizontal form-material" action="{{url('modal')}}" method="POST">
                 {{ csrf_field() }}
                     <div class="form-group">
                             <label class="col-md-12">Tanggal</label>

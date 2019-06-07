@@ -26,12 +26,7 @@
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
-    <div class="preloader">
-        <div class="loader">
-            <div class="loader__figure"></div>
-            <p class="loader__label">Admin Wrap</p>
-        </div>
-    </div>
+    @yield('preloader')
     <div id="main-wrapper">
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
@@ -112,7 +107,7 @@
                             <span class="hide-menu" style="padding-left:10px;">Penjualan Ikan</span>
                         </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
+                        <li> <a class="waves-effect waves-dark" href="{{route('tarif.index')}}" aria-expanded="false">
                             <span><img src="{{asset('assets/icon/investment.png')}}" style="height:25px;width:25px;" alt=""></span>
                             <span class="hide-menu" style="padding-left:10px;">Atur Harga Ikan</span>
                         </a>
