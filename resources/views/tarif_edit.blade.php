@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title')
-<title>Modal</title>
+<title>SILBan|Edit Harga Ikan</title>
 @endsection
 
 @section('breadcrumb')

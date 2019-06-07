@@ -59,8 +59,9 @@
                                 href="#profile-dropdown" data-toggle="dropdown" data-target="#profile-dropdown"
                                 aria-haspopup="true" aria-expanded="false">
                                 <span class="hidden-md-down">{{ Auth::user()->username }}</span>
-                                <span style="padding-left:10px;"><img src="{{asset('assets/icon/down-arrow.png')}}"
-                                        alt="arrowdown" style="height:22px;width:23px;"></span>
+                                <span style="padding-left:10px;">
+                                    <i class="fa fa-caret-down"></i>
+                                </span>
                             </a>
                             <div class="panel-collapse collapse" id="profile-dropdown">
                                 <ul class="navbar-nav dropdown-menu">
@@ -78,10 +79,10 @@
                                             style="display: none;">
                                             @csrf
                                         </form>
-                                    </li>   
+                                    </li>
                                 </ul>
                             </div>
-                            
+
                         </li>
                     </ul>
                 </div>
@@ -92,33 +93,48 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
-                            <span><img src="{{asset('assets/icon/team.png')}}" style="height:25px;width:25px;" alt=""></span>
-                            <span class="hide-menu" style="padding-left:10px;">Pengaturan pegawai</span>
-                        </a>
+                        <li> <a class="waves-effect waves-dark" href="/home" aria-expanded="false">
+                                <span><img src="{{asset('assets/icon/research.png')}}" style="height:33px;width:33px;"
+                                        alt=""></span>
+                                <span class="hide-menu" style="padding-left:10px;">Dashboard</span>
+                            </a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
-                            <span><img src="{{asset('assets/icon/buy.png')}}" style="height:25px;width:25px;" alt=""></span>
-                            <span class="hide-menu" style="padding-left:10px;">Pengeluaran</span>
-                        </a>
+                                <span><img src="{{asset('assets/icon/team.png')}}" style="height:33px;width:33px;"
+                                        alt=""></span>
+                                <span class="hide-menu" style="padding-left:10px;">Pengaturan pegawai</span>
+                            </a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
-                            <span><img src="{{asset('assets/icon/sell-icon.png')}}" style="height:25px;width:25px;" alt=""></span>
-                            <span class="hide-menu" style="padding-left:10px;">Penjualan Ikan</span>
-                        </a>
+                                <span><img src="{{asset('assets/icon/buy.png')}}" style="height:33px;width:33px;"
+                                        alt=""></span>
+                                <span class="hide-menu" style="padding-left:10px;">Pengeluaran</span>
+                            </a>
+                        </li>
+                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
+                                <span><img src="{{asset('assets/icon/sell-icon.png')}}" style="height:33px;width:33px;"
+                                        alt=""></span>
+                                <span class="hide-menu" style="padding-left:10px;">Penjualan Ikan</span>
+                            </a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{route('tarif.index')}}" aria-expanded="false">
-                            <span><img src="{{asset('assets/icon/investment.png')}}" style="height:25px;width:25px;" alt=""></span>
-                            <span class="hide-menu" style="padding-left:10px;">Atur Harga Ikan</span>
-                        </a>
+                                <span><img src="{{asset('assets/icon/investment.png')}}" style="height:33px;width:33px;"
+                                        alt=""></span>
+                                <span class="hide-menu" style="padding-left:10px;">Atur Harga Ikan</span>
+                            </a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('modal.index') }}" aria-expanded="false">
-                            <span><img src="{{asset('assets/icon/modal.png')}}" style="height:25px;width:25px;" alt=""></span>
-                            <span class="hide-menu" style="padding-left:10px;">Modal</span>
-                        </a>
+                                <span><img src="{{asset('assets/icon/modal.png')}}" style="height:33px;width:33px;"
+                                        alt=""></span>
+                                <span class="hide-menu" style="padding-left:10px;">Modal</span>
+                            </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{route('jenis_pengeluaran.index')}}" aria-expanded="false"><i
-                                    class="fa fa-bookmark-o"></i><span class="hide-menu">Jenis Pengeluaran</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('jenis_pengeluaran.index') }}"
+                                aria-expanded="false">
+                                <span><img src="{{asset('assets/icon/bookmark.png')}}" style="height:33px;width:33px;"
+                                        alt=""></span>
+                                <span class="hide-menu" style="padding-left:10px;">Jenis Pengeluaran</span>
+                            </a>
                         </li>
                 </nav>
             </div>

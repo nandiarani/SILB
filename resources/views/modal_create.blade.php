@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title')
-<title>Modal</title>
+<title>SILBan|Tambah Modal</title>
 @endsection
 
 @section('breadcrumb')

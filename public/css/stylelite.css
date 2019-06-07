@@ -1047,7 +1047,6 @@ sidebar navigation
 
 .scroll-sidebar {
     height: 100%;
-    background: #1d2a38;
 }
 
 .scroll-sidebar.ps .ps__scrollbar-y-rail {
@@ -2088,6 +2087,8 @@ ul#themecolors li a.working:before {
     right: 0;
     border-top: 1px solid rgba(120, 130, 140, 0.13);
     background: #ffffff;
+    text-align: right;
+    height: 50px;
 }
 
 
