@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Jenis_Pengeluaran;
+use App\Model\Jenis_Pengeluaran;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Auth;
 
 class JenisPengeluaranController extends Controller
 {
@@ -14,7 +18,10 @@ class JenisPengeluaranController extends Controller
      */
     public function index()
     {
-        //
+        $jenis_pengeluaran=DB::table('jenis_pengeluaran')->where('flag_active','=','1')->paginate(10);
+        $i=1;
+        return view('jenis_pengeluaran',['jenis_pengeluarans'=>$jenis_pengeluaran,'i'=>$i]);
+    
     }
 
     /**
@@ -25,6 +32,7 @@ class JenisPengeluaranController extends Controller
     public function create()
     {
         //
+        return view('jenis_pengeluaran_create');
     }
 
     /**
@@ -35,7 +43,13 @@ class JenisPengeluaranController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $jenis_pengeluaran= new Jenis_Pengeluaran();
+        $jenis_pengeluaran->jenis_pengeluaran=request('jenis_pengeluaran');
+        $jenis_pengeluaran->added_at=Carbon::now()->toDateTimeString();
+        $jenis_pengeluaran->added_by=Auth::user()->id_user;
+        $jenis_pengeluaran->flag_active='1';
+        $jenis_pengeluaran->save();
+        return redirect()->route('jenis_pengeluaran.index');
     }
 
     /**
@@ -55,9 +69,10 @@ class JenisPengeluaranController extends Controller
      * @param  \App\Jenis_Pengeluaran  $jenis_Pengeluaran
      * @return \Illuminate\Http\Response
      */
-    public function edit(Jenis_Pengeluaran $jenis_Pengeluaran)
+    public function edit($id_jenis_pengeluaran)
     {
-        //
+        $jenis_pengeluaran=Jenis_Pengeluaran::find($id_jenis_pengeluaran);
+        return view('jenis_pengeluaran_edit',compact('jenis_pengeluaran'));
     }
 
     /**
@@ -67,9 +82,15 @@ class JenisPengeluaranController extends Controller
      * @param  \App\Jenis_Pengeluaran  $jenis_Pengeluaran
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Jenis_Pengeluaran $jenis_Pengeluaran)
+    public function update(Request $request, $id_jenis_pengeluaran)
     {
-        //
+        $jenis_pengeluaran=Jenis_Pengeluaran::find($id_jenis_pengeluaran);
+        $jenis_pengeluaran->jenis_pengeluaran = $request->get('jenis_pengeluaran');
+        $jenis_pengeluaran->updated_at=Carbon::now()->toDateTimeString();
+        $jenis_pengeluaran->updated_by=Auth::user()->id_user;
+        $jenis_pengeluaran->save();
+        return redirect('jenis_pengeluaran')->with('success','jenis_pengeluaran updated!');
+   
     }
 
     /**
@@ -78,8 +99,12 @@ class JenisPengeluaranController extends Controller
      * @param  \App\Jenis_Pengeluaran  $jenis_Pengeluaran
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Jenis_Pengeluaran $jenis_Pengeluaran)
+    public function destroy($id_jenis_pengeluaran)
     {
-        //
+    
+        $jenis_pengeluaran=Jenis_Pengeluaran::find($id_jenis_pengeluaran);
+        $jenis_pengeluaran->flag_active='0';
+        $jenis_pengeluaran->save();
+        return redirect()->route('jenis_pengeluaran.index');
     }
 }
