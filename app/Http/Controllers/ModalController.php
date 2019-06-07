@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Modal;
+use App\Model\Modal;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Auth;
+
 
 class ModalController extends Controller
 {
@@ -14,7 +19,10 @@ class ModalController extends Controller
      */
     public function index()
     {
-        //
+        $modal=DB::table('modal')->where('flag_active','=','1')->orderBy('added_at','desc')->paginate(5);
+        $i=1;
+        return view('modal',['modals'=>$modal,'i'=>$i]);
+    
     }
 
     /**
@@ -25,6 +33,7 @@ class ModalController extends Controller
     public function create()
     {
         //
+        return view('modal_create');
     }
 
     /**
@@ -35,16 +44,23 @@ class ModalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $modal= new \App\Model\Modal;
+        $modal->nominal=request('nominal');
+        $modal->tanggal=request('tanggal');
+        $modal->added_at=Carbon::now()->toDateTimeString();
+        $modal->added_by=Auth::user()->id_user;
+        $modal->flag_active='1';
+        $modal->save();
+        return redirect()->route('modal.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Modal  $modal
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Modal $modal)
+    public function show($id)
     {
         //
     }
@@ -52,34 +68,50 @@ class ModalController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Modal  $modal
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Modal $modal)
+    public function edit($id_modal)
     {
-        //
+        $modal=Modal::find($id_modal);
+        return view('modal_edit',compact('modal'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Modal  $modal
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Modal $modal)
+    public function update(Request $request, $id_modal)
     {
-        //
+        // $request->validate([
+        //     'tanggal'=>'required',
+        //     'nominal'=>'required|integer'
+        // ]);
+        $modal=Modal::find($id_modal);
+        $modal->tanggal = $request->get('tanggal');
+        $modal->nominal = $request->get('nominal');
+        $modal->updated_at=Carbon::now()->toDateTimeString();
+        $modal->updated_by=Auth::user()->id_user;
+        $modal->save();
+        return redirect('modal')->with('success','modal updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Modal  $modal
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Modal $modal)
+    public function destroy($id_modal)
     {
-        //
+        $modal=Modal::find($id_modal);
+        $modal->flag_active='0';
+        $modal->save();
+        return redirect()->route('modal.index');
+
     }
+
 }

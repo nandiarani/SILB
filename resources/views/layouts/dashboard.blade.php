@@ -26,12 +26,7 @@
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
-    <div class="preloader">
-        <div class="loader">
-            <div class="loader__figure"></div>
-            <p class="loader__label">Admin Wrap</p>
-        </div>
-    </div>
+    @yield('preloader')
     <div id="main-wrapper">
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
@@ -47,7 +42,7 @@
                 <div class="navbar-collapse">
                     {{--  search  --}}
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
+                        {{--  <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
                                 href="javascript:void(0)"><i class="fa fa-bars"></i></a> </li>
                         <li class="nav-item hidden-xs-down search-box"> <a
                                 class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i
@@ -55,7 +50,7 @@
                             <form class="app-search">
                                 <input type="text" class="form-control" placeholder="Search & enter"> <a
                                     class="srh-btn"><i class="fa fa-times"></i></a></form>
-                        </li>
+                        </li>  --}}
                     </ul>
                     {{--  profile  --}}
                     <ul class="navbar-nav my-lg-0">
@@ -97,26 +92,33 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="index.html" aria-expanded="false"><i
-                                    class="fa fa-tachometer"></i><span class="hide-menu">Dashboard</span></a>
+                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
+                            <span><img src="{{asset('assets/icon/team.png')}}" style="height:25px;width:25px;" alt=""></span>
+                            <span class="hide-menu" style="padding-left:10px;">Pengaturan pegawai</span>
+                        </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
-                                    class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
+                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
+                            <span><img src="{{asset('assets/icon/buy.png')}}" style="height:25px;width:25px;" alt=""></span>
+                            <span class="hide-menu" style="padding-left:10px;">Pengeluaran</span>
+                        </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i
-                                    class="fa fa-table"></i><span class="hide-menu">Tables</span></a>
+                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
+                            <span><img src="{{asset('assets/icon/sell-icon.png')}}" style="height:25px;width:25px;" alt=""></span>
+                            <span class="hide-menu" style="padding-left:10px;">Penjualan Ikan</span>
+                        </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="icon-fontawesome.html" aria-expanded="false"><i
-                                    class="fa fa-smile-o"></i><span class="hide-menu">Icons</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{route('tarif.index')}}" aria-expanded="false">
+                            <span><img src="{{asset('assets/icon/investment.png')}}" style="height:25px;width:25px;" alt=""></span>
+                            <span class="hide-menu" style="padding-left:10px;">Atur Harga Ikan</span>
+                        </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i
-                                    class="fa fa-globe"></i><span class="hide-menu">Map</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('modal.index') }}" aria-expanded="false">
+                            <span><img src="{{asset('assets/icon/modal.png')}}" style="height:25px;width:25px;" alt=""></span>
+                            <span class="hide-menu" style="padding-left:10px;">Modal</span>
+                        </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i
-                                    class="fa fa-bookmark-o"></i><span class="hide-menu">Blank</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i
-                                    class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
+                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false"><i
+                                    class="fa fa-bookmark-o"></i><span class="hide-menu">Jenis Pengeluaran</span></a>
                         </li>
                 </nav>
             </div>
@@ -124,17 +126,7 @@
         </aside>
         <div class="page-wrapper">
             <div class="container-fluid">
-                {{-- BREAD CRUMB AND RIGHT SIDEBAR TOGGLE --}}
-                <div class="row page-titles">
-                    <div class="col-md-5 align-self-center">
-                        <h3 class="text-themecolor">Dashboard</h3>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ol>
-                    </div>
-                </div>
-                {{-- BREAD CRUMB END --}}
+                @yield('breadcrumb')
                 {{-- CONTENT HERE --}}
                 @yield('contents')
                 {{-- CONTENT END --}}

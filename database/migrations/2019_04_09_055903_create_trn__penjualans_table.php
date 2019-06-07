@@ -22,6 +22,7 @@ class CreateTrnPenjualansTable extends Migration
             $table->integer('jumlah_ikan')->unsigned()->nullable();
             $table->float('harga_per_ekor')->nullable();
             $table->float('total')->nullable();
+            $table->dateTime('tanggal')->nullable();
 
             $table->dateTime('added_at')->nullable();
             $table->integer('added_by')->nullable();

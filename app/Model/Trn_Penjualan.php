@@ -8,5 +8,6 @@ class Trn_Penjualan extends Model
 {
     protected $table='trn_penjualan';
     protected $primaryKey='id_penjualan';
-    protected $fillable=['tahap','id_ukuran','penjualan_ke','jumlah_ikan','harga_per_ekor','total','added_at','added_by','updated_at','updated_by','flag_active'];
+    protected $fillable=['tahap','id_ukuran','penjualan_ke','jumlah_ikan','harga_per_ekor','total','tanggal','added_at','added_by','updated_at','updated_by','flag_active'];
+    public $timestamps=false;
 }

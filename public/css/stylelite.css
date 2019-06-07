@@ -1047,6 +1047,7 @@ sidebar navigation
 
 .scroll-sidebar {
     height: 100%;
+    background: #1d2a38;
 }
 
 .scroll-sidebar.ps .ps__scrollbar-y-rail {
