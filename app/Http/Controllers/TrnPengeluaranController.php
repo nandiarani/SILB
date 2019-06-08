@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Trn_Pengeluaran;
+use App\Model\Trn_Pengeluaran;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Auth;
+
 
 class TrnPengeluaranController extends Controller
 {
@@ -14,7 +19,14 @@ class TrnPengeluaranController extends Controller
      */
     public function index()
     {
-        //
+        $pengeluaran=DB::table('trn_pengeluaran')
+                ->join('jenis_pengeluaran','trn_pengeluaran.id_jenis_pengeluaran','=','jenis_pengeluaran.id_jenis_pengeluaran')
+                ->select('trn_pengeluaran.*','jenis_pengeluaran.jenis_pengeluaran')
+                ->where('trn_pengeluaran.flag_active','=','1')
+                ->orderBy('trn_pengeluaran.tanggal','desc')
+                ->paginate(10);
+        $i=1;
+        return view('pengeluaran',['pengeluarans'=>$pengeluaran,'i'=>$i]);
     }
 
     /**
@@ -24,7 +36,9 @@ class TrnPengeluaranController extends Controller
      */
     public function create()
     {
-        //
+        $jenisPengeluaran=DB::table('jenis_pengeluaran')->select('id_jenis_pengeluaran','jenis_pengeluaran')->where('flag_active','1')->get();
+        $today=Carbon::now()->toDateString();
+        return view('pengeluaran_create',['jenis_pengeluaran'=>$jenisPengeluaran,'today'=>$today]);
     }
 
     /**
@@ -35,7 +49,17 @@ class TrnPengeluaranController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $pengeluaran= new Trn_Pengeluaran();
+        $pengeluaran->tanggal=request('tanggal');
+        $pengeluaran->id_jenis_pengeluaran=request('jenis_pengeluaran');
+        $pengeluaran->jumlah=request('jumlah');
+        $pengeluaran->harga_satuan=request('harga_satuan');
+        $pengeluaran->total=request('total');
+        $pengeluaran->added_at=Carbon::now()->toDateTimeString();
+        $pengeluaran->added_by=Auth::user()->id_user;
+        $pengeluaran->flag_active='1';
+        $pengeluaran->save();
+        return redirect('/pengeluaran');
     }
 
     /**
@@ -55,9 +79,10 @@ class TrnPengeluaranController extends Controller
      * @param  \App\Trn_Pengeluaran  $trn_Pengeluaran
      * @return \Illuminate\Http\Response
      */
-    public function edit(Trn_Pengeluaran $trn_Pengeluaran)
+    public function edit($id_pengeluaran)
     {
-        //
+        
+        return view('pengeluaran_edit',compact());
     }
 
     /**

@@ -51,7 +51,7 @@
                         <td style="vertical-align:middle;">{{$tarif->ukuran}}</td>
                         <td style="vertical-align:middle;">{{$tarif->size_from_cm}}</td>
                         <td style="vertical-align:middle;">{{$tarif->size_to_cm}}</td>
-                        <td style="vertical-align:middle;">Rp. {{number_format($tarif->harga_per_ekor,0,',','.')}},00</td>
+                        <td style="vertical-align:middle;">Rp. {{number_format($tarif->harga_per_ekor,0,',','.')}}</td>
                         <td style="vertical-align:middle; width:20%;">
                             <a href="{{route('tarif.edit',$tarif->id_ukuran)}}"
                                 class="btn btn btn-info hidden-sm-down ">Edit</a>
