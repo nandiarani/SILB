@@ -18,7 +18,7 @@
 <div class="col-md-7">
     <div class="card">
         <div class="card-body">
-            <form class="form-horizontal form-material" method="POST" action="{{action('ModalController@update',$modal->id_modal)}}" >
+            <form class="form-horizontal form-material" method="POST" action="{{route('modal.update',$modal->id_modal)}}" >
                 @csrf
                 <input name="_method" type="hidden" value="PATCH">
                     <div class="form-group">

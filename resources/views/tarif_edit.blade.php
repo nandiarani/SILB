@@ -18,7 +18,7 @@
 <div class="col-md-7">
     <div class="card">
         <div class="card-body">
-            <form class="form-horizontal form-material" action="{{action('MstTarifByUkuranController@update',$tarif->id_ukuran)}}" method="POST">
+            <form class="form-horizontal form-material" action="{{route('tarif.update',$tarif->id_ukuran)}}" method="POST">
                 @csrf
                 <input name="_method" type="hidden" value="PATCH">
                     <div class="form-group">

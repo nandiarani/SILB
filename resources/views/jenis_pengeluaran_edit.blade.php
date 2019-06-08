@@ -18,7 +18,7 @@
 <div class="col-md-7">
     <div class="card">
         <div class="card-body">
-            <form class="form-horizontal form-material" method="POST" action="{{action('JenisPengeluaranController@update',$jenis_pengeluaran->id_jenis_pengeluaran)}}" >
+            <form class="form-horizontal form-material" method="POST" action="{{route('jenis_pengeluaran.update',$jenis_pengeluaran->id_jenis_pengeluaran)}}" >
                 @csrf
                 <input name="_method" type="hidden" value="PATCH">
                     <div class="form-group">

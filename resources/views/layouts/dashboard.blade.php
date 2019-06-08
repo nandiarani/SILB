@@ -100,9 +100,9 @@
                             </a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
-                                <span><img src="{{asset('assets/icon/team.png')}}" style="height:33px;width:33px;"
+                                <span><img src="{{asset('assets/icon/sell.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>
-                                <span class="hide-menu" style="padding-left:10px;">Pengaturan pegawai</span>
+                                <span class="hide-menu" style="padding-left:10px;">Penjualan Ikan</span>
                             </a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
@@ -111,10 +111,11 @@
                                 <span class="hide-menu" style="padding-left:10px;">Pengeluaran</span>
                             </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
-                                <span><img src="{{asset('assets/icon/sell-icon.png')}}" style="height:33px;width:33px;"
+                        <li> <a class="waves-effect waves-dark" href="{{ route('jenis_pengeluaran.index') }}"
+                                aria-expanded="false">
+                                <span><img src="{{asset('assets/icon/bookmark.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>
-                                <span class="hide-menu" style="padding-left:10px;">Penjualan Ikan</span>
+                                <span class="hide-menu" style="padding-left:10px;">Jenis Pengeluaran</span>
                             </a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{route('tarif.index')}}" aria-expanded="false">
@@ -129,11 +130,10 @@
                                 <span class="hide-menu" style="padding-left:10px;">Modal</span>
                             </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{ route('jenis_pengeluaran.index') }}"
-                                aria-expanded="false">
-                                <span><img src="{{asset('assets/icon/bookmark.png')}}" style="height:33px;width:33px;"
+                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
+                                <span><img src="{{asset('assets/icon/users.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>
-                                <span class="hide-menu" style="padding-left:10px;">Jenis Pengeluaran</span>
+                                <span class="hide-menu" style="padding-left:10px;">Pengaturan pegawai</span>
                             </a>
                         </li>
                 </nav>

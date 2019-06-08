@@ -23,7 +23,7 @@
                     <div class="form-group">
                             <label class="col-md-12">Jenis Pengeluaran</label>
                             <div class="col-md-12">
-                                <input type="text" name="jenis_pengeluaran" placeholder="" class="form-control form-control-line" required>
+                                <input type="text" name="jenis_pengeluaran" placeholder="" class="form-control form-control-line" required autofocus>
                             </div>
                     </div>
                 <div class="form-group">
