@@ -81,8 +81,9 @@ class TrnPengeluaranController extends Controller
      */
     public function edit($id_pengeluaran)
     {
-        
-        return view('pengeluaran_edit',compact());
+        $pengeluaran=Trn_Pengeluaran::find($id_pengeluaran);
+        $jenis_pengeluaran=DB::table('jenis_pengeluaran')->select('id_jenis_pengeluaran','jenis_pengeluaran')->where('flag_active','1')->get();
+        return view('pengeluaran_edit',compact('pengeluaran','jenis_pengeluaran'));
     }
 
     /**
@@ -92,9 +93,18 @@ class TrnPengeluaranController extends Controller
      * @param  \App\Trn_Pengeluaran  $trn_Pengeluaran
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Trn_Pengeluaran $trn_Pengeluaran)
+    public function update(Request $request, $id_pengeluaran)
     {
-        //
+        $pengeluaran= Trn_Pengeluaran::find($id_pengeluaran);
+        $pengeluaran->tanggal=request('tanggal');
+        $pengeluaran->id_jenis_pengeluaran=request('jenis_pengeluaran');
+        $pengeluaran->jumlah=request('jumlah');
+        $pengeluaran->harga_satuan=request('harga_satuan');
+        $pengeluaran->total=request('total');
+        $pengeluaran->updated_at=Carbon::now()->toDateTimeString();
+        $pengeluaran->updated_by=Auth::user()->id_user;
+        $pengeluaran->save();
+        return redirect('/pengeluaran');
     }
 
     /**
@@ -103,8 +113,11 @@ class TrnPengeluaranController extends Controller
      * @param  \App\Trn_Pengeluaran  $trn_Pengeluaran
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Trn_Pengeluaran $trn_Pengeluaran)
+    public function destroy($id_pengeluaran)
     {
-        //
+        $pengeluaran= Trn_Pengeluaran::find($id_pengeluaran);
+        $pengeluaran->flag_active='0';
+        $pengeluaran->save();
+        return redirect('/pengeluaran');
     }
 }
