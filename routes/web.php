@@ -18,9 +18,11 @@ Route::get('/', function () {
 Auth::routes(['verify'=>true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('modal', 'ModalController')->middleware('auth');
-Route::resource('tarif', 'MstTarifByUkuranController')->middleware('auth');
-Route::resource('jenis_pengeluaran', 'JenisPengeluaranController')->middleware('auth');
+Route::resource('modal', 'ModalController')->middleware(['auth','owner']);
+Route::resource('tarif', 'MstTarifByUkuranController')->middleware(['auth','owner']);
+Route::resource('jenis_pengeluaran', 'JenisPengeluaranController')->middleware(['auth','owner']);
+    
+
 
 
 

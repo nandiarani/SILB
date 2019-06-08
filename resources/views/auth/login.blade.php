@@ -15,6 +15,7 @@
 
     {{-- script --}}
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{asset('../assets/node_modules/jquery/jquery.min.js')}}"></script>
 </head>
 
 <body class="app flex-row align-items-center">
@@ -29,11 +30,6 @@
                                 <h1>Login</h1>
                                 <p class="text-muted">Sign In to your account</p>
                                 <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="icon-user"></i>
-                                        </span>
-                                    </div>
                                     <input id="email" class="form-control{{$errors->has('email') ? ' is-invalid' : ''}}"
                                         type="text" name="email" value="{{old('email')}}" placeholder="Email/Username"
                                         required autofocus>
@@ -43,12 +39,7 @@
                                     </span>
                                     @endif
                                 </div>
-                                <div class="input-group mb-4">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="icon-lock"></i>
-                                        </span>
-                                    </div>
+                                <div class="input-group mb-3" id="TogglePassword">
                                     <input id="password"
                                         class="form-control{{$errors->has('password') ? ' is-invalid' : ''}}"
                                         type="password" name="password" placeholder="Password" required>
@@ -57,6 +48,11 @@
                                         <strong>{{$errors->first('password')}}</strong>
                                     </span>
                                     @endif
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" >
+                                            <img id="IconTogglePassword" src="{{asset('assets/icon/opened_eye.png')}}" width="18px" height="18px">
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
@@ -84,5 +80,17 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $("#IconTogglePassword").click(function() {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+            x.type = "text";
+            $('#IconTogglePassword').attr("src","{{asset('assets/icon/closed_eye.png')}}");
+            } else {
+            x.type = "password";
+            $('#IconTogglePassword').attr("src","{{asset('assets/icon/opened_eye.png')}}");
+            }
+        });
+    </script>
 </body>
 </html>

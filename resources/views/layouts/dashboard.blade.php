@@ -111,12 +111,13 @@
                                 <span class="hide-menu" style="padding-left:10px;">Pengeluaran</span>
                             </a>
                         </li>
+                        @if (Auth::user()->role==='owner')
                         <li> <a class="waves-effect waves-dark" href="{{ route('jenis_pengeluaran.index') }}"
-                                aria-expanded="false">
-                                <span><img src="{{asset('assets/icon/bookmark.png')}}" style="height:33px;width:33px;"
-                                        alt=""></span>
-                                <span class="hide-menu" style="padding-left:10px;">Jenis Pengeluaran</span>
-                            </a>
+                            aria-expanded="false">
+                            <span><img src="{{asset('assets/icon/bookmark.png')}}" style="height:33px;width:33px;"
+                                    alt=""></span>
+                            <span class="hide-menu" style="padding-left:10px;">Jenis Pengeluaran</span>
+                        </a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{route('tarif.index')}}" aria-expanded="false">
                                 <span><img src="{{asset('assets/icon/investment.png')}}" style="height:33px;width:33px;"
@@ -136,6 +137,7 @@
                                 <span class="hide-menu" style="padding-left:10px;">Pengaturan pegawai</span>
                             </a>
                         </li>
+                        @endif
                 </nav>
             </div>
 
