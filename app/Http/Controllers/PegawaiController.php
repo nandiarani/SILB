@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Peran;
+use App\Model\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Auth;
 
-class PeranController extends Controller
+class PegawaiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +18,9 @@ class PeranController extends Controller
      */
     public function index()
     {
-        //
+        $pegawai=DB::table('users')->where('role','=','employee')->paginate(10);
+        $i=1;
+        return view('pegawai',['pegawais'=>$pegawai,'i'=>$i]); 
     }
 
     /**
@@ -41,10 +47,10 @@ class PeranController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Peran  $peran
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Peran $peran)
+    public function show($id)
     {
         //
     }
@@ -52,33 +58,41 @@ class PeranController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Peran  $peran
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Peran $peran)
+    public function edit($id)
     {
-        //
+        $pegawai=User::find($id);
+        if ($pegawai->flag_active=='1') {
+            $pegawai->flag_active='0';
+        } else {
+            $pegawai->flag_active='1';
+        }
+        $pegawai->save();
+        return redirect('/pegawai');
+        
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Peran  $peran
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Peran $peran)
+    public function update(Request $request, $id)
     {
-        //
+        //        
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Peran  $peran
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Peran $peran)
+    public function destroy($id)
     {
         //
     }

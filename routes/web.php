@@ -21,6 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('modal', 'ModalController')->middleware(['auth','owner']);
 Route::resource('tarif', 'MstTarifByUkuranController')->middleware(['auth','owner']);
 Route::resource('jenis_pengeluaran', 'JenisPengeluaranController')->middleware(['auth','owner']);
+Route::resource('pegawai', 'PegawaiController')->middleware(['auth','owner']);
+
     
 
 
