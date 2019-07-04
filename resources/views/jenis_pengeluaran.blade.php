@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title')
-<title>SILBan|Jenis Pengeluaran</title>
+<title>SITran|Jenis Pengeluaran</title>
 @endsection
 
 @section('preloader')

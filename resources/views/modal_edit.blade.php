@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title')
-<title>SILBan|Edit Modal</title>
+<title>SITran|Edit Modal</title>
 @endsection
 
 @section('breadcrumb')

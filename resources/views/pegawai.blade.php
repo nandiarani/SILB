@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title')
-<title>SILBan|Pengelolaan Pegawai</title>
+<title>SITran|Pengelolaan Pegawai</title>
 @endsection
 
 @section('preloader')

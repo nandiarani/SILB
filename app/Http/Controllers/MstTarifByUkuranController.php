@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Mst_Tarif_By_Ukuran;
+use App\Model\History_Mst_Tarif;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -54,6 +55,14 @@ class MstTarifByUkuranController extends Controller
         $tarif->added_by=Auth::user()->id_user;
         $tarif->flag_active='1';
         $tarif->save();
+        $history= new History_Mst_Tarif();
+        $history->ukuran=request('ukuran');
+        $history->size_from_cm=request('uk_dari');
+        $history->size_to_cm=request('uk_sampai');
+        $history->harga_per_ekor=request('harga');
+        $history->added_at=Carbon::now()->toDateTimeString();
+        $history->added_by=Auth::user()->id_user;
+        $history->save();
         return redirect()->route('tarif.index');
     }
 
@@ -96,6 +105,31 @@ class MstTarifByUkuranController extends Controller
         $tarif->harga_per_ekor = $request->get('harga');
         $tarif->updated_at=Carbon::now()->toDateTimeString();
         $tarif->updated_by=Auth::user()->id_user;
+
+        //update history
+        $history=DB::table('history_mst_tarif')
+                    ->whereColumn([
+                        ['ukuran','=',$tarif->ukuran],
+                        ['size_from_cm','=',$tarif->size_from_cm],
+                        ['size_to_cm','=',$tarif->size_to_cm],
+                        ['harga_per_ekor','=',$tarif->harga_per_ekor],
+                        ['added_at','=',$tarif->added_at],
+                        ['added_by','=',$tarif->added_by],
+                        ])
+                    ->get();
+        $history->updated_at=Carbon::now()->toDateTimeString();
+        $history->updated_by=Auth::user()->id_user;
+
+        //insert history
+        $history= new History_Mst_Tarif();
+        $history->ukuran=request('ukuran');
+        $history->size_from_cm=request('uk_dari');
+        $history->size_to_cm=request('uk_sampai');
+        $history->harga_per_ekor=request('harga');
+        $history->added_at=Carbon::now()->toDateTimeString();
+        $history->added_by=Auth::user()->id_user;
+        $history->save();
+
         $tarif->save();
         return redirect('tarif')->with('success','tarif updated!');
     }
@@ -109,6 +143,24 @@ class MstTarifByUkuranController extends Controller
     public function destroy($id_ukuran)
     {
         $tarif=Mst_Tarif_By_Ukuran::find($id_ukuran);
+        
+        //update history
+        $history=DB::table('history_mst_tarif')
+                    ->whereColumn([
+                        ['ukuran','=',$tarif->ukuran],
+                        ['size_from_cm','=',$tarif->size_from_cm],
+                        ['size_to_cm','=',$tarif->size_to_cm],
+                        ['harga_per_ekor','=',$tarif->harga_per_ekor],
+                        ['added_at','=',$tarif->added_at],
+                        ['added_by','=',$tarif->added_by],
+                        ])
+                    ->get();
+        $history->updated_at=Carbon::now()->toDateTimeString();
+        $history->updated_by=Auth::user()->id_user;
+
+        //update mst
+        $tarif->updated_at=Carbon::now()->toDateTimeString();
+        $tarif->updated_by=Auth::user()->id_user;
         $tarif->flag_active='0';
         $tarif->save();
         return redirect()->route('tarif.index');

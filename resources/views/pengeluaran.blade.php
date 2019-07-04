@@ -1,13 +1,22 @@
-@extends('layouts.dashboard') @section('title')
-<title>SILBan|Pengelolaan pengeluaran</title>
-@endsection @section('preloader')
+@extends('layouts.dashboard') 
+
+@section('title')
+<title>SITran|Pengelolaan pengeluaran</title>
+@endsection 
+
+@section('preloader')
 <div class="preloader">
     <div class="loader">
         <div class="loader__figure"></div>
         <p class="loader__label">Loading pengeluaran</p>
     </div>
 </div>
-@endsection @section('breadcrumb') @endsection @section('contents')
+@endsection 
+
+@section('breadcrumb') 
+@endsection 
+
+@section('contents')
 <div class="card">
     <div class="card-body">
         <div class="col md-12" style="border-bottom:2px solid #d5dae2;margin-bottom:15px;">

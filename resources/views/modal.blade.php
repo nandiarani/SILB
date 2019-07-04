@@ -1,5 +1,5 @@
 @extends('layouts.dashboard') @section('title')
-<title>SILBan|Pengelolaan Modal</title>
+<title>SITran|Pengelolaan Modal</title>
 @endsection @section('preloader')
 <div class="preloader">
     <div class="loader">

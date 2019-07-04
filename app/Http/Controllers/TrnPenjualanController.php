@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Trn_Penjualan;
+use App\Model\Trn_Penjualan;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Auth;
 
 class TrnPenjualanController extends Controller
 {
@@ -14,7 +18,10 @@ class TrnPenjualanController extends Controller
      */
     public function index()
     {
-        //
+        $penjualan=DB::table('trn_penjualan')
+            ->join('mst_tarif_by_ukuran');
+        
+        return view('');
     }
 
     /**
@@ -24,7 +31,8 @@ class TrnPenjualanController extends Controller
      */
     public function create()
     {
-        //
+        $harga_ikan=DB::table('mst_tarif_by_ukuran')->where('flag_active','=','1')->get();
+        return view('');
     }
 
     /**
