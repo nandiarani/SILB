@@ -98,37 +98,38 @@ class MstTarifByUkuranController extends Controller
      */
     public function update(Request $request, $id_ukuran)
     {
+        $datetimenow=Carbon::now()->toDateTimeString();
+        $usersession=Auth::user()->id_user;
         $tarif=Mst_tarif_by_ukuran::find($id_ukuran);
-        $tarif->ukuran = $request->get('ukuran');
-        $tarif->size_from_cm = $request->get('uk_dari');
-        $tarif->size_to_cm = $request->get('uk_sampai');
-        $tarif->harga_per_ekor = $request->get('harga');
-        $tarif->updated_at=Carbon::now()->toDateTimeString();
-        $tarif->updated_by=Auth::user()->id_user;
-
+    
         //update history
-        $history=DB::table('history_mst_tarif')
-                    ->whereColumn([
-                        ['ukuran','=',$tarif->ukuran],
-                        ['size_from_cm','=',$tarif->size_from_cm],
-                        ['size_to_cm','=',$tarif->size_to_cm],
-                        ['harga_per_ekor','=',$tarif->harga_per_ekor],
-                        ['added_at','=',$tarif->added_at],
-                        ['added_by','=',$tarif->added_by],
-                        ])
-                    ->get();
-        $history->updated_at=Carbon::now()->toDateTimeString();
-        $history->updated_by=Auth::user()->id_user;
-
+        DB::table('history_mst_tarif')
+            ->where([
+                ['ukuran','=',$tarif->ukuran],
+                ['size_from_cm','=',$tarif->size_from_cm],
+                ['size_to_cm','=',$tarif->size_to_cm],
+                ['harga_per_ekor','=',$tarif->harga_per_ekor],
+                ['added_at','=',$tarif->added_at],
+                ['added_by','=',$tarif->added_by],
+                ])
+            ->update(['updated_at'=>$datetimenow,'updated_by'=>$usersession]);
+        
         //insert history
         $history= new History_Mst_Tarif();
         $history->ukuran=request('ukuran');
         $history->size_from_cm=request('uk_dari');
         $history->size_to_cm=request('uk_sampai');
         $history->harga_per_ekor=request('harga');
-        $history->added_at=Carbon::now()->toDateTimeString();
-        $history->added_by=Auth::user()->id_user;
+        $history->added_at=$datetimenow;
+        $history->added_by=$usersession;
         $history->save();
+            
+        $tarif->ukuran = $request->get('ukuran');
+        $tarif->size_from_cm = $request->get('uk_dari');
+        $tarif->size_to_cm = $request->get('uk_sampai');
+        $tarif->harga_per_ekor = $request->get('harga');
+        $tarif->updated_at=$datetimenow;
+        $tarif->updated_by=$usersession;
 
         $tarif->save();
         return redirect('tarif')->with('success','tarif updated!');
@@ -142,25 +143,27 @@ class MstTarifByUkuranController extends Controller
      */
     public function destroy($id_ukuran)
     {
+        
+        $datetimenow=Carbon::now()->toDateTimeString();
+        $usersession=Auth::user()->id_user;
+
         $tarif=Mst_Tarif_By_Ukuran::find($id_ukuran);
         
         //update history
-        $history=DB::table('history_mst_tarif')
-                    ->whereColumn([
-                        ['ukuran','=',$tarif->ukuran],
-                        ['size_from_cm','=',$tarif->size_from_cm],
-                        ['size_to_cm','=',$tarif->size_to_cm],
-                        ['harga_per_ekor','=',$tarif->harga_per_ekor],
-                        ['added_at','=',$tarif->added_at],
-                        ['added_by','=',$tarif->added_by],
-                        ])
-                    ->get();
-        $history->updated_at=Carbon::now()->toDateTimeString();
-        $history->updated_by=Auth::user()->id_user;
+        DB::table('history_mst_tarif')
+            ->where([
+                ['ukuran','=',$tarif->ukuran],
+                ['size_from_cm','=',$tarif->size_from_cm],
+                ['size_to_cm','=',$tarif->size_to_cm],
+                ['harga_per_ekor','=',$tarif->harga_per_ekor],
+                ['added_at','=',$tarif->added_at],
+                ['added_by','=',$tarif->added_by],
+                ])
+            ->update(['updated_at'=>$datetimenow,'updated_by'=>$usersession]);
 
         //update mst
-        $tarif->updated_at=Carbon::now()->toDateTimeString();
-        $tarif->updated_by=Auth::user()->id_user;
+        $tarif->updated_at=$datetimenow;
+        $tarif->updated_by=$usersession;
         $tarif->flag_active='0';
         $tarif->save();
         return redirect()->route('tarif.index');
