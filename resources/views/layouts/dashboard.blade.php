@@ -98,7 +98,7 @@
                                 <span class="hide-menu" style="padding-left:10px;">Dashboard</span>
                             </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
+                        <li> <a class="waves-effect waves-dark" href="{{route('penjualan.index')}}" aria-expanded="false">
                                 <span><img src="{{asset('assets/icon/sell.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>
                                 <span class="hide-menu" style="padding-left:10px;">Penjualan Ikan</span>
