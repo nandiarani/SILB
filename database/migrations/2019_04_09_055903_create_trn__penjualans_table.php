@@ -16,22 +16,22 @@ class CreateTrnPenjualansTable extends Migration
         Schema::create('trn_penjualan', function (Blueprint $table) {
             $table->increments('id_penjualan');
             $table->integer('tahap')->unsigned()->nullable();
-            $table->integer('id_ukuran');
-
             $table->integer('penjualan_ke')->unsigned()->nullable();
+
             $table->integer('jumlah_ikan')->unsigned()->nullable();
+            $table->string('ukuran');
             $table->float('harga_per_ekor')->nullable();
+            $table->integer('size_from_cm')->unsigned()->nullable();
+            $table->integer('size_to_cm')->unsigned()->nullable();
+
             $table->float('total')->nullable();
             $table->dateTime('tanggal')->nullable();
 
             $table->dateTime('added_at')->nullable();
             $table->integer('added_by')->nullable();
-            
             $table->dateTime('updated_at')->nullable();
-            $table->integer('updated_by')->nullable();
-            
-            $table->enum('flag_active', ['0', '1']);
-            
+            $table->integer('updated_by')->nullable();            
+            $table->enum('flag_active', ['0', '1']); 
         });
     }
 

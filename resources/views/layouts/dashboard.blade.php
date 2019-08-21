@@ -20,6 +20,7 @@
     <link href="{{asset('css/colors/default.css')}}" id="theme" rel="stylesheet">
 
     {{-- script --}}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
@@ -98,13 +99,13 @@
                                 <span class="hide-menu" style="padding-left:10px;">Dashboard</span>
                             </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
+                        <li> <a class="waves-effect waves-dark" href="{{route('penjualan.index')}}" aria-expanded="false">
                                 <span><img src="{{asset('assets/icon/sell.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>
                                 <span class="hide-menu" style="padding-left:10px;">Penjualan Ikan</span>
                             </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false">
+                        <li> <a class="waves-effect waves-dark" href="{{route('pengeluaran.index')}}" aria-expanded="false">
                                 <span><img src="{{asset('assets/icon/buy.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>
                                 <span class="hide-menu" style="padding-left:10px;">Pengeluaran</span>
