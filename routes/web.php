@@ -25,7 +25,8 @@ Route::resource('pegawai', 'PegawaiController')->middleware(['auth','owner']);
 
 Route::resource('pengeluaran', 'TrnPengeluaranController')->middleware('auth');
 Route::resource('penjualan', 'TrnPenjualanController')->middleware('auth');
-Route::get('penjualan/fetch/{date}','TrnPenjualanController@fetch')->name('penjualan.fetch');
+Route::get('penjualan/fetch/{date}','TrnPenjualanController@fetch');
+Route::get('penjualan/getdata/{id_ukuran}','TrnPenjualanController@getdata');
     
 
 

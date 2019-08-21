@@ -51,7 +51,7 @@
                     @foreach ($penjualans as $penjualan)
                     <tr>
                         <td style="vertical-align:middle;">{{$i++}}</td>
-                        <td style="vertical-align:middle;">{{$penjualan->tanggal}}</td>
+                        <td style="vertical-align:middle;">{{ date('d-m-Y', strtotime($penjualan->tanggal))}}</td>
                         <td style="vertical-align:middle;">{{$penjualan->tahap}}</td>
                         <td style="vertical-align:middle;">{{$penjualan->penjualan_ke}}</td>
                         <td style="vertical-align:middle;">{{$penjualan->jumlah_ikan}}</td>
@@ -59,8 +59,8 @@
                         <td style="vertical-align:middle;">Rp. {{number_format($penjualan->harga_per_ekor,0,',','.')}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($penjualan->total,0,',','.')}}</td>
                         <td style="vertical-align:middle; width:20%;">
-                            {{--  <a href="{{route('pengeluaran.edit',$penjualan->id_penjualan)}}" class="btn btn btn-info hidden-sm-down ">Ubah</a>  --}}
-                            <form action="{{ route('pengeluaran.destroy', $penjualan->id_penjualan) }}" method="POST" class="btn" style="padding:0px;">
+                            <a href="{{route('penjualan.edit',$penjualan->id_penjualan)}}" class="btn btn btn-info hidden-sm-down ">Ubah</a> 
+                            <form action="{{ route('penjualan.destroy', $penjualan->id_penjualan) }}" method="POST" class="btn" style="padding:0px;">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <input type="submit" class="btn btn btn-danger hidden-sm-down" value="Hapus">

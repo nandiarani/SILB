@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Auth;
 
-
 class TrnPengeluaranController extends Controller
 {
     /**

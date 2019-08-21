@@ -19,6 +19,7 @@ class CreateHistoryMstTarif extends Migration
             $table->integer('size_from_cm')->unsigned()->nullable();
             $table->integer('size_to_cm')->unsigned()->nullable();
             $table->float('harga_per_ekor')->nullable();
+            
 
             $table->dateTime('added_at')->nullable();
             $table->integer('added_by')->nullable();
