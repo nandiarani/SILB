@@ -120,6 +120,8 @@
                 success:function(result){
                     for(var i in result){
                         $('#harga_satuan').val(result[i].harga_per_ekor);
+                        var jumlah=$('#jumlah').val();
+                        $('#total').val(jumlah*result[i].harga_per_ekor);
                     }
                 }
             });

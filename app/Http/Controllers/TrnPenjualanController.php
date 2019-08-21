@@ -123,6 +123,21 @@ class TrnPenjualanController extends Controller
      */
     public function update(Request $request, $id_penjualan)
     {
+        $id_ukuran=request('harga_per_ekor');
+        $hist=History_Mst_Tarif::find($id_ukuran);
+        $penjualan = Trn_Penjualan::find($id_penjualan);
+        $penjualan->tahap= request('tahap');
+        $penjualan->ukuran=$hist->ukuran;
+        $penjualan->penjualan_ke=request('penjualan_ke');
+        $penjualan->jumlah_ikan=request('jumlah');
+        $penjualan->harga_per_ekor=$hist->harga_per_ekor;
+        $penjualan->size_from_cm=$hist->size_from_cm;
+        $penjualan->size_to_cm=$hist->size_to_cm;
+        $penjualan->total=request('total');
+        $penjualan->tanggal=request('tanggal');
+        $penjualan->updated_at=Carbon::now()->toDateTimeString();
+        $penjualan->updated_by=Auth::user()->id_user;
+        $penjualan->save();
         return redirect('/penjualan');
     }
 
