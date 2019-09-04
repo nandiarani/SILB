@@ -27,7 +27,7 @@ class TrnPenjualanController extends Controller
     
     function fetch($date)
     {
-        $data=DB::select('SELECT id_ukuran, harga_per_ekor FROM history_mst_tarif where :tanggal1 BETWEEN added_at and updated_at or (updated_at is null and added_at<= :tanggal2)', 
+        $data=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM history_mst_tarif where :tanggal1 BETWEEN added_at and updated_at or (updated_at is null and added_at<= :tanggal2)', 
                     ['tanggal1'=>$date,
                     'tanggal2'=>$date
                     ]);
@@ -47,7 +47,7 @@ class TrnPenjualanController extends Controller
     public function create()
     {
         $today=Carbon::now()->toDateString();
-        $harga=DB::select('SELECT id_ukuran, harga_per_ekor FROM history_mst_tarif where :tanggal1 BETWEEN added_at and updated_at or (updated_at is null and Date(added_at)<= :tanggal2)', 
+        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM history_mst_tarif where :tanggal1 BETWEEN added_at and updated_at or (updated_at is null and Date(added_at)<= :tanggal2)', 
                 ['tanggal1'=>$today,
                 'tanggal2'=>$today
                 ]);

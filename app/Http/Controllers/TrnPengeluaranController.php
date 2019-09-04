@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Trn_Pengeluaran;
+use App\Model\Jenis_Pengeluaran;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -19,8 +20,7 @@ class TrnPengeluaranController extends Controller
     public function index()
     {
         $pengeluaran=DB::table('trn_pengeluaran')
-                ->join('jenis_pengeluaran','trn_pengeluaran.id_jenis_pengeluaran','=','jenis_pengeluaran.id_jenis_pengeluaran')
-                ->select('trn_pengeluaran.*','jenis_pengeluaran.jenis_pengeluaran')
+                ->select('trn_pengeluaran.*')
                 ->where('trn_pengeluaran.flag_active','=','1')
                 ->orderBy('trn_pengeluaran.tanggal','desc')
                 ->paginate(10);
@@ -48,9 +48,10 @@ class TrnPengeluaranController extends Controller
      */
     public function store(Request $request)
     {
+        $jenisPengeluaran=Jenis_Pengeluaran::find(request('jenis_pengeluaran'));
         $pengeluaran= new Trn_Pengeluaran();
         $pengeluaran->tanggal=request('tanggal');
-        $pengeluaran->id_jenis_pengeluaran=request('jenis_pengeluaran');
+        $pengeluaran->jenis_pengeluaran=$jenisPengeluaran->jenis_pengeluaran;
         $pengeluaran->jumlah=request('jumlah');
         $pengeluaran->harga_satuan=request('harga_satuan');
         $pengeluaran->total=request('total');
@@ -81,8 +82,9 @@ class TrnPengeluaranController extends Controller
     public function edit($id_pengeluaran)
     {
         $pengeluaran=Trn_Pengeluaran::find($id_pengeluaran);
+        $tanggal=date('Y-m-d',strtotime($pengeluaran->tanggal));
         $jenis_pengeluaran=DB::table('jenis_pengeluaran')->select('id_jenis_pengeluaran','jenis_pengeluaran')->where('flag_active','1')->get();
-        return view('pengeluaran_edit',compact('pengeluaran','jenis_pengeluaran'));
+        return view('pengeluaran_edit',compact('pengeluaran','jenis_pengeluaran','tanggal'));
     }
 
     /**
@@ -94,9 +96,10 @@ class TrnPengeluaranController extends Controller
      */
     public function update(Request $request, $id_pengeluaran)
     {
+        $jenisPengeluaran=Jenis_Pengeluaran::find(request('jenis_pengeluaran'));
         $pengeluaran= Trn_Pengeluaran::find($id_pengeluaran);
         $pengeluaran->tanggal=request('tanggal');
-        $pengeluaran->id_jenis_pengeluaran=request('jenis_pengeluaran');
+        $pengeluaran->jenis_pengeluaran=$jenisPengeluaran->jenis_pengeluaran;
         $pengeluaran->jumlah=request('jumlah');
         $pengeluaran->harga_satuan=request('harga_satuan');
         $pengeluaran->total=request('total');

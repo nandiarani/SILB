@@ -48,7 +48,7 @@
                     @foreach ($pengeluarans as $pengeluaran)
                     <tr>
                         <td style="vertical-align:middle;">{{$i++}}</td>
-                        <td style="vertical-align:middle;">{{$pengeluaran->tanggal}}</td>
+                        <td style="vertical-align:middle;">{{date('d-m-Y', strtotime($pengeluaran->tanggal))}}</td>
                         <td style="vertical-align:middle;">{{$pengeluaran->jenis_pengeluaran}}</td>
                         <td style="vertical-align:middle;">{{$pengeluaran->jumlah}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($pengeluaran->harga_satuan,0,',','.')}}</td>

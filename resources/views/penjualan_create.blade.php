@@ -33,7 +33,7 @@
                         <select name="harga_per_ekor" id="harga_per_ekor" class="bootstrap-select form-control form-control-line">
                                 <option value="0" selected>-</option>
                             @foreach ($hargas as $harga)
-                                <option value="{{$harga->id_ukuran}}">Rp {{$harga->harga_per_ekor}}</option>
+                                <option value="{{$harga->id_ukuran}}">Rp {{$harga->harga_per_ekor}} - {{$harga->ukuran}} ({{$harga->size_from_cm}} cm - {{$harga->size_to_cm}}cm)</option>
                             @endforeach
                         </select>
                     </div>
@@ -100,7 +100,7 @@
                         $('#total').val('');
                         $('#harga_per_ekor').append('<option value="0" selected>-</option>');
                         for(var i in result){
-                            $('#harga_per_ekor').append('<option value="'+result[i].id_ukuran+'">Rp '+result[i].harga_per_ekor+'</option>');
+                            $('#harga_per_ekor').append('<option value="'+result[i].id_ukuran+'">Rp '+result[i].harga_per_ekor+' - '+result[i].ukuran+' ( '+result[i].size_from_cm+'cm - '+result[i].size_to_cm+' cm)</option>');
                         }
                     }
                 });
