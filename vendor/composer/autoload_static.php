@@ -458,6 +458,7 @@ class ComposerStaticInit87a2ccf7da6340cadde8a55184e884c3
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\UserActiveMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/UserActiveMiddleware.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Model\\History_Mst_Tarif' => __DIR__ . '/../..' . '/app/Model/History_Mst_Tarif.php',
         'App\\Model\\Jenis_Pengeluaran' => __DIR__ . '/../..' . '/app/Model/Jenis_Pengeluaran.php',
         'App\\Model\\Modal' => __DIR__ . '/../..' . '/app/Model/Modal.php',
         'App\\Model\\Mst_Tarif_By_Ukuran' => __DIR__ . '/../..' . '/app/Model/Mst_Tarif_By_Ukuran.php',
