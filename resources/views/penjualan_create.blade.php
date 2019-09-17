@@ -83,9 +83,6 @@
 @section('js')
 <script type="text/javascript">
     $(document).ready(function(){
-        $("option").mouseenter(function(){
-            console.log("test hover");
-        });
         $('#tanggal').change(function(){
             if($(this).val()!='')
             {
@@ -108,6 +105,7 @@
         });
         $('#harga_per_ekor').change(function(){
             var id_ukuran=$(this).find(":selected").val();
+            console.log(id_ukuran);
             $.ajax({
                 url:'/penjualan/getdata/'+id_ukuran,
                 type:"GET",
@@ -115,14 +113,12 @@
                 success:function(result){
                     for(var i in result){
                         $('#harga_satuan').val(result[i].harga_per_ekor);
+                        var jumlah=$('#jumlah').val();
+                        var harga_satuan=result[i].harga_per_ekor;
+                        $('#total').val(jumlah*harga_satuan);
                     }
                 }
             });
-        }); 
-        $('#harga_per_ekor').change(function(){
-            var jumlah=$('#jumlah').val();
-            var harga_satuan=$('#harga_satuan').text();
-            $('#total').val(jumlah*harga_satuan);
         });
         $('#jumlah').change(function(){
             var jumlah=$('#jumlah').val();

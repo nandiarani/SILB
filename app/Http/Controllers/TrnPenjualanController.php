@@ -22,7 +22,9 @@ class TrnPenjualanController extends Controller
     {
         $penjualan=DB::table('trn_penjualan')
                     ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-                    ->where('trn_penjualan.flag_active','=','1')->paginate(5);
+                    ->where('trn_penjualan.flag_active','=','1')
+                    ->orderby('tanggal','desc')
+                    ->paginate(10);
         $i=1;
         return view('penjualan',['penjualans'=>$penjualan,'i'=>$i]);
     }
@@ -36,8 +38,8 @@ class TrnPenjualanController extends Controller
         }
         else{
             Log::info('masok 2');
-            $data=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where (? BETWEEN added_at and updated_at)', 
-            [$date]);
+            $data=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where (? BETWEEN added_at and updated_at) OR (updated_at IS NULL AND added_at<=?)', 
+            [$date,$date]);
         }
         return json_encode($data);
     }
@@ -102,21 +104,19 @@ class TrnPenjualanController extends Controller
     public function edit($id_penjualan)
     {
         $penjualan=Trn_Penjualan::find($id_penjualan);
-
+        $tarif=Mst_Harga_Ikan::find($penjualan->id_ukuran);
         $today=Carbon::now()->toDateString();
         //semua tarif by tanggal
         if($penjualan->tanggal==$today){
-            Log::info('masok');
             $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
         }
         else{
-            Log::info('masok 2');
-            $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where (? BETWEEN added_at and updated_at)', 
-            [$penjualan->tanggal]);
+            $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where (? BETWEEN added_at and updated_at) OR (updated_at IS NULL AND added_at<=?)', 
+            [$penjualan->tanggal,$penjualan->tanggal]);
         }
         //id harga yang di select default
-        // $id_ukuran=
-        return view('penjualan_edit',['penjualan'=>$penjualan,'hargas'=>$harga,'tanggal'=>$penjualan->tanggal]);
+        $ukuran=$penjualan->id_ukuran;
+        return view('penjualan_edit',['penjualan'=>$penjualan,'hargas'=>$harga,'tanggal'=>$penjualan->tanggal,'ukuran'=>$ukuran,'harga_per_ekor'=>$tarif->harga_per_ekor]);
     }
 
     /**

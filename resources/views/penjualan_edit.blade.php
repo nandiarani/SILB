@@ -34,10 +34,10 @@
                         <select name="harga_per_ekor" id="harga_per_ekor" class="bootstrap-select form-control form-control-line">
                                 <option value="0">-</option>
                             @foreach ($hargas as $harga)
-                                @if ($harga->harga_per_ekor===$penjualan->harga_per_ekor)
-                                    <option selected value="{{$harga->id_ukuran}}">Rp {{$harga->harga_per_ekor}}</option>
+                                @if ($harga->id_ukuran===$ukuran)
+                                    <option selected value="{{$harga->id_ukuran}}">Rp {{$harga->harga_per_ekor}} - {{$harga->ukuran}} ({{$harga->size_from_cm}} cm - {{$harga->size_to_cm}}cm)</option>
                                 @else
-                                    <option value="{{$harga->id_ukuran}}">Rp {{$harga->harga_per_ekor}}</option>
+                                    <option value="{{$harga->id_ukuran}}">Rp {{$harga->harga_per_ekor}} - {{$harga->ukuran}} ({{$harga->size_from_cm}} cm - {{$harga->size_to_cm}}cm)</option>
                                 @endif
                             @endforeach
                         </select>
@@ -55,11 +55,12 @@
                         <input type="number" name="penjualan_ke" placeholder="" min="0" class="form-control form-control-line" required autofocus value="{{$penjualan->penjualan_ke}}">
                     </div>
                 </div>
+                
                 <div class="form-group">
-                        <label class="col-md-12">Jumlah ikan</label>
-                        <div class="col-md-12">
-                            <input type="number" id="jumlah" name="jumlah" placeholder="" min="0" class="form-control form-control-line" required autofocus value="{{$penjualan->jumlah_ikan}}">
-                        </div>
+                    <label class="col-md-12">Jumlah ikan</label>
+                    <div class="col-md-12">
+                        <input type="number" id="jumlah" name="jumlah" placeholder="" min="0" class="form-control form-control-line" required autofocus value="{{$penjualan->jumlah_ikan}}">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-12">Harga total ikan</label>
@@ -69,7 +70,7 @@
                 </div> 
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input type="number" name="harga_satuan" id="harga_satuan" placeholder="" class="form-control form-control-line" required autofocus hidden value="{{$penjualan->harga_per_ekor}}">
+                        <input type="number" name="harga_satuan" id="harga_satuan" placeholder="" class="form-control form-control-line" required autofocus hidden value="{{$harga_per_ekor}}">
                     </div>
                 </div> 
                 <div class="form-group">
@@ -88,9 +89,6 @@
 @section('js')
 <script type="text/javascript">
     $(document).ready(function(){
-        $("option").mouseenter(function(){
-            console.log("test hover");
-        });
         $('#tanggal').change(function(){
             if($(this).val()!='')
             {
@@ -105,7 +103,7 @@
                         $('#total').val('');
                         $('#harga_per_ekor').append('<option value="0" selected>-</option>');
                         for(var i in result){
-                            $('#harga_per_ekor').append('<option value="'+result[i].id_ukuran+'">Rp '+result[i].harga_per_ekor+'</option>');
+                            $('#harga_per_ekor').append('<option value="'+result[i].id_ukuran+'">Rp '+result[i].harga_per_ekor+' - '+result[i].ukuran+' ( '+result[i].size_from_cm+'cm - '+result[i].size_to_cm+' cm)</option>');
                         }
                     }
                 });
@@ -113,6 +111,7 @@
         });
         $('#harga_per_ekor').change(function(){
             var id_ukuran=$(this).find(":selected").val();
+            console.log(id_ukuran);
             $.ajax({
                 url:'/penjualan/getdata/'+id_ukuran,
                 type:"GET",
@@ -121,15 +120,11 @@
                     for(var i in result){
                         $('#harga_satuan').val(result[i].harga_per_ekor);
                         var jumlah=$('#jumlah').val();
-                        $('#total').val(jumlah*result[i].harga_per_ekor);
+                        var harga_satuan=result[i].harga_per_ekor;
+                        $('#total').val(jumlah*harga_satuan);
                     }
                 }
             });
-        }); 
-        $('#harga_per_ekor').change(function(){
-            var jumlah=$('#jumlah').val();
-            var harga_satuan=$('#harga_satuan').text();
-            $('#total').val(jumlah*harga_satuan);
         });
         $('#jumlah').change(function(){
             var jumlah=$('#jumlah').val();
