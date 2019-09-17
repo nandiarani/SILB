@@ -17,16 +17,10 @@ class CreateTrnPenjualansTable extends Migration
             $table->increments('id_penjualan');
             $table->integer('tahap')->unsigned()->nullable();
             $table->integer('penjualan_ke')->unsigned()->nullable();
-
             $table->integer('jumlah_ikan')->unsigned()->nullable();
-            $table->string('ukuran');
-            $table->float('harga_per_ekor')->nullable();
-            $table->integer('size_from_cm')->unsigned()->nullable();
-            $table->integer('size_to_cm')->unsigned()->nullable();
-
-            $table->float('total')->nullable();
-            $table->dateTime('tanggal')->nullable();
-
+            $table->integer('id_ukuran')->nullable();
+            $table->float('total',20,2)->nullable();
+            $table->date('tanggal')->nullable();
             $table->dateTime('added_at')->nullable();
             $table->integer('added_by')->nullable();
             $table->dateTime('updated_at')->nullable();

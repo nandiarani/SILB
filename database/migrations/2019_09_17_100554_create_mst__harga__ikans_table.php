@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMstTarifByUkuransTable extends Migration
+class CreateMstHargaIkansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,17 @@ class CreateMstTarifByUkuransTable extends Migration
      */
     public function up()
     {
-        Schema::create('mst_tarif_by_ukuran', function (Blueprint $table) {
+        Schema::create('mst_harga_ikan', function (Blueprint $table) {
             $table->increments('id_ukuran');
             $table->string('ukuran')->nullable();
             $table->integer('size_from_cm')->unsigned()->nullable();
             $table->integer('size_to_cm')->unsigned()->nullable();
-            $table->float('harga_per_ekor')->nullable();
-
-            $table->dateTime('added_at')->nullable();
-            $table->integer('added_by')->nullable();
-            
-            $table->dateTime('updated_at')->nullable();
-            $table->integer('updated_by')->nullable();
-            
-            $table->enum('flag_active', ['0', '1']);
+            $table->float('harga_per_ekor',20,2)->nullable();
+            $table->date('added_at')->nullable();
+            $table->integer('added_by')->nullable();            
+            $table->date('updated_at')->nullable();
+            $table->integer('updated_by')->nullable();       
+            $table->enum('flag_active', ['0', '1']); 
         });
     }
 
@@ -37,6 +34,6 @@ class CreateMstTarifByUkuransTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mst_tarif_by_ukuran');
+        Schema::dropIfExists('mst_harga_ikan');
     }
 }

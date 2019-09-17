@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Trn_Penjualan;
-use App\Model\History_Mst_Tarif;
+use App\Model\Mst_Harga_Ikan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -20,22 +20,30 @@ class TrnPenjualanController extends Controller
      */
     public function index()
     {
-        $penjualan=DB::table('trn_penjualan')->where('flag_active','=','1')->paginate(5);
+        $penjualan=DB::table('trn_penjualan')
+                    ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
+                    ->where('trn_penjualan.flag_active','=','1')->paginate(5);
         $i=1;
         return view('penjualan',['penjualans'=>$penjualan,'i'=>$i]);
     }
     
     function fetch($date)
     {
-        $data=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM history_mst_tarif where :tanggal1 BETWEEN added_at and updated_at or (updated_at is null and added_at<= :tanggal2)', 
-                    ['tanggal1'=>$date,
-                    'tanggal2'=>$date
-                    ]);
+        $today=Carbon::now()->toDateString();
+        if($date==$today){
+            Log::info('masok');
+            $data=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
+        }
+        else{
+            Log::info('masok 2');
+            $data=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where (? BETWEEN added_at and updated_at)', 
+            [$date]);
+        }
         return json_encode($data);
     }
 
     function getdata($id_ukuran){
-        $data=DB::select('SELECT harga_per_ekor FROM history_mst_tarif where id_ukuran= :ukuran', 
+        $data=DB::select('SELECT harga_per_ekor FROM mst_harga_ikan where id_ukuran= :ukuran', 
                     ['ukuran'=>$id_ukuran]);
         return json_encode($data);
     }
@@ -47,10 +55,7 @@ class TrnPenjualanController extends Controller
     public function create()
     {
         $today=Carbon::now()->toDateString();
-        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM history_mst_tarif where :tanggal1 BETWEEN added_at and updated_at or (updated_at is null and Date(added_at)<= :tanggal2)', 
-                ['tanggal1'=>$today,
-                'tanggal2'=>$today
-                ]);
+        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
         
         return view('penjualan_create',['today'=>$today,'hargas'=>$harga]);
     }
@@ -63,16 +68,11 @@ class TrnPenjualanController extends Controller
      */
     public function store(Request $request)
     {
-        $id_ukuran=request('harga_per_ekor');
-        $hist=History_Mst_Tarif::find($id_ukuran);
         $penjualan = new Trn_Penjualan();
         $penjualan->tahap= request('tahap');
-        $penjualan->ukuran=$hist->ukuran;
         $penjualan->penjualan_ke=request('penjualan_ke');
         $penjualan->jumlah_ikan=request('jumlah');
-        $penjualan->harga_per_ekor=$hist->harga_per_ekor;
-        $penjualan->size_from_cm=$hist->size_from_cm;
-        $penjualan->size_to_cm=$hist->size_to_cm;
+        $penjualan->id_ukuran=request('harga_per_ekor');
         $penjualan->total=request('total');
         $penjualan->tanggal=request('tanggal');
         $penjualan->added_at=Carbon::now()->toDateTimeString();
@@ -102,16 +102,21 @@ class TrnPenjualanController extends Controller
     public function edit($id_penjualan)
     {
         $penjualan=Trn_Penjualan::find($id_penjualan);
-        $tanggal=date('Y-m-d',strtotime($penjualan->tanggal));
-        Log::info('tanggal',['tanggal'=>$tanggal]);
+
+        $today=Carbon::now()->toDateString();
         //semua tarif by tanggal
-        $harga=DB::select('SELECT id_ukuran, harga_per_ekor FROM history_mst_tarif where :tanggal1 BETWEEN added_at and updated_at or (updated_at is null and Date(added_at)<= :tanggal2)', 
-                ['tanggal1'=>$tanggal,
-                'tanggal2'=>$tanggal
-                ]);
+        if($penjualan->tanggal==$today){
+            Log::info('masok');
+            $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
+        }
+        else{
+            Log::info('masok 2');
+            $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where (? BETWEEN added_at and updated_at)', 
+            [$penjualan->tanggal]);
+        }
         //id harga yang di select default
         // $id_ukuran=
-        return view('penjualan_edit',['penjualan'=>$penjualan,'hargas'=>$harga,'tanggal'=>$tanggal]);
+        return view('penjualan_edit',['penjualan'=>$penjualan,'hargas'=>$harga,'tanggal'=>$penjualan->tanggal]);
     }
 
     /**
@@ -123,16 +128,11 @@ class TrnPenjualanController extends Controller
      */
     public function update(Request $request, $id_penjualan)
     {
-        $id_ukuran=request('harga_per_ekor');
-        $hist=History_Mst_Tarif::find($id_ukuran);
         $penjualan = Trn_Penjualan::find($id_penjualan);
         $penjualan->tahap= request('tahap');
-        $penjualan->ukuran=$hist->ukuran;
         $penjualan->penjualan_ke=request('penjualan_ke');
         $penjualan->jumlah_ikan=request('jumlah');
-        $penjualan->harga_per_ekor=$hist->harga_per_ekor;
-        $penjualan->size_from_cm=$hist->size_from_cm;
-        $penjualan->size_to_cm=$hist->size_to_cm;
+        $penjualan->id_ukuran=request('harga_per_ekor');
         $penjualan->total=request('total');
         $penjualan->tanggal=request('tanggal');
         $penjualan->updated_at=Carbon::now()->toDateTimeString();

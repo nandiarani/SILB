@@ -15,7 +15,7 @@ class CreateModalsTable extends Migration
     {
         Schema::create('modal', function (Blueprint $table) {
             $table->increments('id_modal');
-            $table->float('nominal')->nullable();
+            $table->float('nominal',20,2)->nullable();
             $table->date('tanggal')->nullable();       
 
             $table->dateTime('added_at')->nullable();

@@ -39,6 +39,7 @@ return array(
     'App\\Model\\Trn_Pengeluaran' => $baseDir . '/app/Model/Trn_Pengeluaran.php',
     'App\\Model\\Trn_Penjualan' => $baseDir . '/app/Model/Trn_Penjualan.php',
     'App\\Model\\User' => $baseDir . '/app/Model/User.php',
+    'App\\Mst_Harga_Ikan' => $baseDir . '/app/Model/Mst_Harga_Ikan.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',

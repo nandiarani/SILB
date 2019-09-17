@@ -465,6 +465,7 @@ class ComposerStaticInit87a2ccf7da6340cadde8a55184e884c3
         'App\\Model\\Trn_Pengeluaran' => __DIR__ . '/../..' . '/app/Model/Trn_Pengeluaran.php',
         'App\\Model\\Trn_Penjualan' => __DIR__ . '/../..' . '/app/Model/Trn_Penjualan.php',
         'App\\Model\\User' => __DIR__ . '/../..' . '/app/Model/User.php',
+        'App\\Mst_Harga_Ikan' => __DIR__ . '/../..' . '/app/Model/Mst_Harga_Ikan.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',

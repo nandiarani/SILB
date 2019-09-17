@@ -15,10 +15,10 @@ class CreateTrnPengeluaransTable extends Migration
     {
         Schema::create('trn_pengeluaran', function (Blueprint $table) {
             $table->increments('id_pengeluaran');
-            $table->string('jenis_pengeluaran');
+            $table->integer('id_jenis_pengeluaran');
             $table->integer('jumlah')->unsigned()->nullable();
-            $table->float('harga_satuan')->nullable();
-            $table->float('total')->nullable();
+            $table->float('harga_satuan',20,2)->nullable();
+            $table->float('total',20,2)->nullable();
             $table->dateTime('tanggal')->nullable();
             
 
