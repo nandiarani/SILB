@@ -20,7 +20,7 @@ class MstHargaIkanController extends Controller
     {
         $tarif=DB::table('mst_harga_ikan')->whereNull('updated_at')->paginate(5);
         $i=1;
-        return view('tarif',['tarifs'=>$tarif,'i'=>$i]);
+        return view('harga_ikan.index',['tarifs'=>$tarif,'i'=>$i]);
     }
 
     /**
@@ -31,7 +31,7 @@ class MstHargaIkanController extends Controller
     public function create()
     {
         //
-        return view('tarif_create');
+        return view('harga_ikan.create');
     }
 
     /**
@@ -76,7 +76,7 @@ class MstHargaIkanController extends Controller
     public function edit($id_ukuran)
     {
         $tarif=Mst_Harga_Ikan::find($id_ukuran);
-        return view('tarif_edit',compact('tarif'));
+        return view('harga_ikan.edit',compact('tarif'));
         //
     }
 

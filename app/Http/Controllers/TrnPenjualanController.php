@@ -26,7 +26,7 @@ class TrnPenjualanController extends Controller
                     ->orderby('tanggal','desc')
                     ->paginate(10);
         $i=1;
-        return view('penjualan',['penjualans'=>$penjualan,'i'=>$i]);
+        return view('penjualan.index',['penjualans'=>$penjualan,'i'=>$i]);
     }
     
     function fetch($date)
@@ -59,7 +59,7 @@ class TrnPenjualanController extends Controller
         $today=Carbon::now()->toDateString();
         $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
         
-        return view('penjualan_create',['today'=>$today,'hargas'=>$harga]);
+        return view('penjualan.create',['today'=>$today,'hargas'=>$harga]);
     }
 
     /**
@@ -116,7 +116,7 @@ class TrnPenjualanController extends Controller
         }
         //id harga yang di select default
         $ukuran=$penjualan->id_ukuran;
-        return view('penjualan_edit',['penjualan'=>$penjualan,'hargas'=>$harga,'tanggal'=>$penjualan->tanggal,'ukuran'=>$ukuran,'harga_per_ekor'=>$tarif->harga_per_ekor]);
+        return view('penjualan.edit',['penjualan'=>$penjualan,'hargas'=>$harga,'tanggal'=>$penjualan->tanggal,'ukuran'=>$ukuran,'harga_per_ekor'=>$tarif->harga_per_ekor]);
     }
 
     /**

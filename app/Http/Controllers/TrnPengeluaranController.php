@@ -25,7 +25,7 @@ class TrnPengeluaranController extends Controller
                 ->orderBy('trn_pengeluaran.tanggal','desc')
                 ->paginate(10);
         $i=1;
-        return view('pengeluaran',['pengeluarans'=>$pengeluaran,'i'=>$i]);
+        return view('pengeluaran.index',['pengeluarans'=>$pengeluaran,'i'=>$i]);
     }
 
     /**
@@ -37,7 +37,7 @@ class TrnPengeluaranController extends Controller
     {
         $jenisPengeluaran=DB::table('jenis_pengeluaran')->select('id_jenis_pengeluaran','jenis_pengeluaran')->where('flag_active','1')->get();
         $today=Carbon::now()->toDateString();
-        return view('pengeluaran_create',['jenis_pengeluaran'=>$jenisPengeluaran,'today'=>$today]);
+        return view('pengeluaran.create',['jenis_pengeluaran'=>$jenisPengeluaran,'today'=>$today]);
     }
 
     /**
@@ -84,7 +84,7 @@ class TrnPengeluaranController extends Controller
         $pengeluaran=Trn_Pengeluaran::find($id_pengeluaran);
         $tanggal=date('Y-m-d',strtotime($pengeluaran->tanggal));
         $jenis_pengeluaran=DB::table('jenis_pengeluaran')->select('id_jenis_pengeluaran','jenis_pengeluaran')->where('flag_active','1')->get();
-        return view('pengeluaran_edit',compact('pengeluaran','jenis_pengeluaran','tanggal'));
+        return view('pengeluaran.edit',compact('pengeluaran','jenis_pengeluaran','tanggal'));
     }
 
     /**

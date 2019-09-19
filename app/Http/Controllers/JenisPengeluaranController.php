@@ -20,7 +20,7 @@ class JenisPengeluaranController extends Controller
     {
         $jenis_pengeluaran=DB::table('jenis_pengeluaran')->where('flag_active','=','1')->paginate(10);
         $i=1;
-        return view('jenis_pengeluaran',['jenis_pengeluarans'=>$jenis_pengeluaran,'i'=>$i]);
+        return view('jenis_pengeluaran.index',['jenis_pengeluarans'=>$jenis_pengeluaran,'i'=>$i]);
     
     }
 
@@ -32,7 +32,7 @@ class JenisPengeluaranController extends Controller
     public function create()
     {
         //
-        return view('jenis_pengeluaran_create');
+        return view('jenis_pengeluaran.create');
     }
 
     /**
@@ -72,7 +72,7 @@ class JenisPengeluaranController extends Controller
     public function edit($id_jenis_pengeluaran)
     {
         $jenis_pengeluaran=Jenis_Pengeluaran::find($id_jenis_pengeluaran);
-        return view('jenis_pengeluaran_edit',compact('jenis_pengeluaran'));
+        return view('jenis_pengeluaran.edit',compact('jenis_pengeluaran'));
     }
 
     /**

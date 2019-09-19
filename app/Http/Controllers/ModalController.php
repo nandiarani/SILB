@@ -21,7 +21,7 @@ class ModalController extends Controller
     {
         $modal=DB::table('modal')->where('flag_active','=','1')->orderBy('added_at','desc')->paginate(5);
         $i=1;
-        return view('modal',['modals'=>$modal,'i'=>$i]);
+        return view('modal.index',['modals'=>$modal,'i'=>$i]);
     
     }
 
@@ -33,7 +33,7 @@ class ModalController extends Controller
     public function create()
     {
         //
-        return view('modal_create');
+        return view('modal.create');
     }
 
     /**
@@ -74,7 +74,7 @@ class ModalController extends Controller
     public function edit($id_modal)
     {
         $modal=Modal::find($id_modal);
-        return view('modal_edit',compact('modal'));
+        return view('modal.edit',compact('modal'));
     }
 
     /**

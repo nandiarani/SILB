@@ -20,7 +20,7 @@ class PegawaiController extends Controller
     {
         $pegawai=DB::table('users')->where('role','=','employee')->paginate(10);
         $i=1;
-        return view('pegawai',['pegawais'=>$pegawai,'i'=>$i]); 
+        return view('pegawai.index',['pegawais'=>$pegawai,'i'=>$i]); 
     }
 
     /**
