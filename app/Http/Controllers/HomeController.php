@@ -31,25 +31,43 @@ class HomeController extends Controller
         $dropdownyear=DB::select("select year(tanggal) as year from trn_penjualan union DISTINCT select year(tanggal) as year from trn_pengeluaran order by year");
         return view('home',compact('dropdownmonth','dropdownyear'));
     }
-    function fetchChart(){
-        $penjualan=DB::table('trn_penjualan')
+    function fetchChart($month,$year){
+        
+        
+        Log::info($month);
+        
+        if ($month==0) {
+            $penjualan=DB::table('trn_penjualan')
                     ->select(DB::raw('concat("1 ",date_format(tanggal,"%M %Y")) as period, sum(total) as penjualan , 0 as pengeluaran'))
-                    ->where('flag_active', '=', '1')
+                    ->whereraw('flag_active="1" and year(tanggal)=?',$year)
                     ->groupBy(DB::raw('period'))
                     ->orderBy('tanggal','ASC')
                     ->get();
-        $pengeluaran=DB::table('trn_pengeluaran')
+            $pengeluaran=DB::table('trn_pengeluaran')
                     ->select(DB::raw('concat("1 ",date_format(tanggal,"%M %Y")) as period, sum(total) as pengeluaran , 0 as penjualan'))
-                    ->where('flag_active', '=', '1')
+                    ->whereraw('flag_active="1" and year(tanggal)=?',$year)
                     ->groupBy(DB::raw('period'))
                     ->orderBy('tanggal','ASC')
                     ->get();
+        } else {
+            $penjualan=DB::table('trn_penjualan')
+                    ->select(DB::raw('tanggal as period, sum(total) as penjualan , 0 as pengeluaran'))
+                    ->whereraw('flag_active="1" and year(tanggal)=? and month(tanggal)=?',[$year,$month])
+                    ->groupBy(DB::raw('tanggal'))
+                    ->orderBy('tanggal','ASC')
+                    ->get();
+            $pengeluaran=DB::table('trn_pengeluaran')
+                    ->select(DB::raw('tanggal as period, sum(total) as pengeluaran , 0 as penjualan'))
+                    ->whereraw('flag_active="1" and year(tanggal)=? and month(tanggal)=?',[$year,$month])
+                    ->groupBy(DB::raw('tanggal'))
+                    ->orderBy('tanggal','ASC')
+                    ->get();            
+        }
+        
         
         //merge 2 collection
         foreach ($penjualan as $sell) {
             foreach ($pengeluaran as $buy) {
-                
-                Log::info($buy->period);
                 if($sell->period===$buy->period){       
                     $sell->pengeluaran=$buy->pengeluaran;
                 }
@@ -57,21 +75,27 @@ class HomeController extends Controller
                     if(!$penjualan->contains('period',$buy->period)){
 
                         $penjualan->push($buy);
-                        Log::info('success');
                     }
                 }
             }
         }
-        
+        //merge done
         //sort collection by date
         foreach ($penjualan as $sell) {
             $sell->period= strtotime($sell->period);
         }
         $penjualan=$penjualan->sortBy('period');
+
         foreach ($penjualan as $sell) {
-            $sell->period = date('F Y',$sell->period);   
-            Log::info($sell->period);   
+            
+            if($month==0)
+                $sell->period = date('Y-m',$sell->period);   
+            else 
+                $sell->period = date('Y-m-j',$sell->period);   
+            
+            
         }
+        //sort done
         return json_encode($penjualan);
     }
     public function getDataPenjualan(){

@@ -34,12 +34,13 @@
                         <div class="col-md-2">
                             <select id="year" class="form-control form-control-line">
                                 @foreach ($dropdownyear as $year)
-                                    <option value="{{$year->year}}">{{$year->year}}</option>
+                                    <option value="{{$year->year}}" selected>{{$year->year}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-2">
                             <select id="month" class="form-control form-control-line">
+                                    <option value="0">-</option>
                                     @foreach ($dropdownmonth as $month)
                                         <option value="{{$month->mon}}">{{$month->month}}</option>
                                     @endforeach
@@ -49,7 +50,7 @@
             </div>
 </form>
             <div class="col md-12">
-                    <div id="sales-chart"></div>
+                    <div id="report-chart"></div>
             </div>
         </div>
     </div>
@@ -57,16 +58,56 @@
     
 @section('js')
     <script type="text/javascript">
-        
+    $month=0;
+    $.chart=function(){
+        $year=$('#year').val();
+        $month=$('#month').val();
+        $('#report-chart').empty();
+        $.ajax({
+            url: '/fetchChart/' + $month + '/' + $year,
+            type: "GET",
+            dataType: "json",
+            success: function(result) {
+                Morris.Area({
+                    element: 'report-chart',
+                    data: result,
+                    xkey: "period",
+                    ykeys: ["penjualan", "pengeluaran"],
+                    labels: ['Penjualan', 'Pengeluaran'],
+                    pointSize: 0,
+                    fillOpacity: 0,
+                    pointStrokeColors: ['#20aee3', '#24d2b5'],
+                    behaveLikeLine: true,
+                    gridLineColor: '#e0e0e0',
+                    lineWidth: 3,
+                    hideHover: 'auto',
+                    lineColors: ['#20aee3', '#24d2b5'],
+                    resize: true
+            
+                });
+            }
+        });
+      }
     $(document).ready(function(){
+        
+        $.chart();
+        $('#year').change(function(){
+            $.chart();
+        });
+        $('#month').change(function(){
+            $.chart();
+        });
         $('#tipe').change(function(){
             var tipe=$(this).find(":selected").val();
-            if(tipe==='Tahunan')
+            if(tipe==='Tahunan'){
                 $('#month').css("visibility","hidden");
-            else
-            $('#month').css("visibility","visible");
+                $month=0;
+            }
+            else{
+                $('#month').css("visibility","visible");
+                $('#month').val('0');
+            }
         });
     });
-
     </script>
 @endsection
