@@ -29,7 +29,7 @@
                         <th>{{'#'}}</th>
                         <th>{{'Tanggal'}}</th>
                         <th>{{'Nominal'}}</th>
-                        <th>Action</th>
+                        <th style="text-align:center;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,7 +38,7 @@
                         <td style="vertical-align:middle;">{{$i++}}</td>
                         <td style="vertical-align:middle;">{{$modal->tanggal}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($modal->nominal,0,',','.')}}</td>
-                        <td style="vertical-align:middle; width:20%;">
+                        <td style="vertical-align:middle; width:20%; text-align:center;">
                             <a href="{{route('modal.edit',$modal->id_modal)}}" class="btn btn btn-info hidden-sm-down ">Ubah</a>
                             <form action="{{ route('modal.destroy', $modal->id_modal) }}" method="POST" class="btn" style="padding:0px;">
                                 <input type="hidden" name="_method" value="DELETE">

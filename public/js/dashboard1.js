@@ -36,8 +36,8 @@ $(function() {
 
         legend: {
             hide: true
-            //or hide: 'data1'
-            //or hide: ['data1', 'data2']
+                //or hide: 'data1'
+                //or hide: ['data1', 'data2']
         },
         color: {
             pattern: ['#eceff1', '#24d2b5', '#6772e5', '#20aee3']
@@ -71,8 +71,8 @@ $(function() {
         },
         legend: {
             hide: true
-            //or hide: 'data1'
-            //or hide: ['data1', 'data2']
+                //or hide: 'data1'
+                //or hide: ['data1', 'data2']
         },
         grid: {
             x: {
@@ -122,8 +122,8 @@ $(function() {
         },
         legend: {
             hide: true
-            //or hide: 'data1'
-            //or hide: ['data1', 'data2']
+                //or hide: 'data1'
+                //or hide: ['data1', 'data2']
         },
         color: {
             pattern: ['#eceff1', '#24d2b5', '#6772e5', '#20aee3']

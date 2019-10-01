@@ -17,9 +17,9 @@
 @endsection 
 
 @section('contents')
-<div class="card">
+<div class="card" >
     <div class="card-body">
-        <div class="col md-12" style="border-bottom:2px solid #d5dae2;margin-bottom:15px;">
+        <div class="col md-12"  style="border-bottom:2px solid #d5dae2;margin-bottom:15px;">
             <h4 class="card-title">Pengelolaan Penjualan</h4>
         </div>
         <a href="{{route('penjualan.create')}}" class="btn waves-effect waves-light btn btn-success pull-right hidden-sm-down">Tambah</a>
@@ -44,7 +44,7 @@
                         <th>{{'Harga Per ekor'}}</th>
                         <th>{{'Total'}}</th>
                         
-                        <th>Action</th>
+                        <th style="text-align:center;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,7 +58,7 @@
                         <td style="vertical-align:middle;">{{$penjualan->ukuran}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($penjualan->harga_per_ekor,0,',','.')}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($penjualan->total,0,',','.')}}</td>
-                        <td style="vertical-align:middle; width:20%;">
+                        <td style="vertical-align:middle; width:20%; text-align:center;">
                             <a href="{{route('penjualan.edit',$penjualan->id_penjualan)}}" class="btn btn btn-info hidden-sm-down ">Ubah</a> 
                             <form action="{{ route('penjualan.destroy', $penjualan->id_penjualan) }}" method="POST" class="btn" style="padding:0px;">
                                 <input type="hidden" name="_method" value="DELETE">

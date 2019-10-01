@@ -37,7 +37,7 @@
                         <tr>
                             <th>{{'#'}}</th>
                             <th>{{'Jenis Pengeluaran'}}</th>
-                            <th>Action</th>
+                            <th style="text-align:center;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,8 +45,7 @@
                                 <tr >
                                         <td style="vertical-align:middle;">{{$i++}}</td>
                                         <td style="vertical-align:middle;">{{$jenis_pengeluaran->jenis_pengeluaran}}</td>
-                                        <td style="vertical-align:middle; width:20%;">
-                                                <a href="{{route('jenis_pengeluaran.edit',$jenis_pengeluaran->id_jenis_pengeluaran)}}" class="btn btn btn-info hidden-sm-down ">Edit</a>
+                                        <td style="vertical-align:middle; width:20%; text-align:center;">
                                                 <form action="{{ route('jenis_pengeluaran.destroy', $jenis_pengeluaran->id_jenis_pengeluaran) }}" method="POST" class="btn" style="padding:0px;">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -57,9 +56,7 @@
                                 @endforeach
                     </tbody>
                 </table>
-            @endif
-           
-            
+            @endif            
         </div>
         <div >{{$jenis_pengeluarans->links()}}</div>
     </div>

@@ -20,7 +20,8 @@ class TrnPengeluaranController extends Controller
     public function index()
     {
         $pengeluaran=DB::table('trn_pengeluaran')
-                ->select('trn_pengeluaran.*')
+                ->join('jenis_pengeluaran','trn_pengeluaran.id_jenis_pengeluaran','=','jenis_pengeluaran.id_jenis_pengeluaran')
+                ->select('trn_pengeluaran.*','jenis_pengeluaran.jenis_pengeluaran')
                 ->where('trn_pengeluaran.flag_active','=','1')
                 ->orderBy('trn_pengeluaran.tanggal','desc')
                 ->paginate(10);
@@ -48,10 +49,9 @@ class TrnPengeluaranController extends Controller
      */
     public function store(Request $request)
     {
-        $jenisPengeluaran=Jenis_Pengeluaran::find(request('jenis_pengeluaran'));
         $pengeluaran= new Trn_Pengeluaran();
         $pengeluaran->tanggal=request('tanggal');
-        $pengeluaran->jenis_pengeluaran=$jenisPengeluaran->jenis_pengeluaran;
+        $pengeluaran->id_jenis_pengeluaran=request('jenis_pengeluaran');
         $pengeluaran->jumlah=request('jumlah');
         $pengeluaran->harga_satuan=request('harga_satuan');
         $pengeluaran->total=request('total');
@@ -96,10 +96,9 @@ class TrnPengeluaranController extends Controller
      */
     public function update(Request $request, $id_pengeluaran)
     {
-        $jenisPengeluaran=Jenis_Pengeluaran::find(request('jenis_pengeluaran'));
         $pengeluaran= Trn_Pengeluaran::find($id_pengeluaran);
         $pengeluaran->tanggal=request('tanggal');
-        $pengeluaran->jenis_pengeluaran=$jenisPengeluaran->jenis_pengeluaran;
+        $pengeluaran->id_jenis_pengeluaran=request('jenis_pengeluaran');
         $pengeluaran->jumlah=request('jumlah');
         $pengeluaran->harga_satuan=request('harga_satuan');
         $pengeluaran->total=request('total');

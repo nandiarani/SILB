@@ -71,8 +71,6 @@ class JenisPengeluaranController extends Controller
      */
     public function edit($id_jenis_pengeluaran)
     {
-        $jenis_pengeluaran=Jenis_Pengeluaran::find($id_jenis_pengeluaran);
-        return view('jenis_pengeluaran.edit',compact('jenis_pengeluaran'));
     }
 
     /**
@@ -84,13 +82,7 @@ class JenisPengeluaranController extends Controller
      */
     public function update(Request $request, $id_jenis_pengeluaran)
     {
-        $jenis_pengeluaran=Jenis_Pengeluaran::find($id_jenis_pengeluaran);
-        $jenis_pengeluaran->jenis_pengeluaran = $request->get('jenis_pengeluaran');
-        $jenis_pengeluaran->updated_at=Carbon::now()->toDateTimeString();
-        $jenis_pengeluaran->updated_by=Auth::user()->id_user;
-        $jenis_pengeluaran->save();
-        return redirect('jenis_pengeluaran')->with('success','jenis_pengeluaran updated!');
-   
+     
     }
 
     /**

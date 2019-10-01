@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Response;
 use App\Model\Trn_Penjualan;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class HomeController extends Controller
 {
@@ -25,16 +27,89 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $dropdownmonth=DB::select("select month(tanggal) as mon, monthname(tanggal) as month from trn_penjualan union DISTINCT select month(tanggal) as mon, monthname(tanggal) as month from trn_pengeluaran order by mon");
+        $dropdownyear=DB::select("select year(tanggal) as year from trn_penjualan union DISTINCT select year(tanggal) as year from trn_pengeluaran order by year");
+        return view('home',compact('dropdownmonth','dropdownyear'));
+    }
+    function fetchChart(){
+        $penjualan=DB::table('trn_penjualan')
+                    ->select(DB::raw('concat("1 ",date_format(tanggal,"%M %Y")) as period, sum(total) as penjualan , 0 as pengeluaran'))
+                    ->where('flag_active', '=', '1')
+                    ->groupBy(DB::raw('period'))
+                    ->orderBy('tanggal','ASC')
+                    ->get();
+        $pengeluaran=DB::table('trn_pengeluaran')
+                    ->select(DB::raw('concat("1 ",date_format(tanggal,"%M %Y")) as period, sum(total) as pengeluaran , 0 as penjualan'))
+                    ->where('flag_active', '=', '1')
+                    ->groupBy(DB::raw('period'))
+                    ->orderBy('tanggal','ASC')
+                    ->get();
+        
+        //merge 2 collection
+        foreach ($penjualan as $sell) {
+            foreach ($pengeluaran as $buy) {
+                
+                Log::info($buy->period);
+                if($sell->period===$buy->period){       
+                    $sell->pengeluaran=$buy->pengeluaran;
+                }
+                else {
+                    if(!$penjualan->contains('period',$buy->period)){
+
+                        $penjualan->push($buy);
+                        Log::info('success');
+                    }
+                }
+            }
+        }
+        
+        //sort collection by date
+        foreach ($penjualan as $sell) {
+            $sell->period= strtotime($sell->period);
+        }
+        $penjualan=$penjualan->sortBy('period');
+        foreach ($penjualan as $sell) {
+            $sell->period = date('F Y',$sell->period);   
+            Log::info($sell->period);   
+        }
+        return json_encode($penjualan);
     }
     public function getDataPenjualan(){
         $data=DB::table('trn_penjualan')
-        ->select(DB::raw("sum(jumlah_ikan) as jumlah_ikan, tanggal"))
-        ->where('flag_active','=','1')
-        ->groupby('tanggal')
-        ->orderby('tanggal','asc')                
+        ->select(DB::raw("sum(jumlah_ikan) as jumlah_ikan, year(tanggal) year, month(tanggal) month"))
+        ->whereraw('flag_active = "1" and tanggal < (SELECT date_sub(last_day(CURRENT_DATE), interval 1 month))')
+        ->groupby('year', 'month')
+        ->orderby('year','asc')
+        ->orderby('month','asc')                
         ->get();
-        // $data=DB::select(DB::raw("select sum(jumlah_ikan) as total, MONTH(tanggal) as month, year(tanggal) as year FROM trn_penjualan group BY Month(tanggal),year(tanggal) order by year(tanggal) asc,month(tanggal) asc"));
         return ($data);
+    }
+    public function report(){
+        $penjualan=DB::table('trn_penjualan')
+        ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
+        ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),', penjualan ke-',trn_penjualan.penjualan_ke,', tahap ke-',trn_penjualan.tahap) as keterangan"))
+        ->where('trn_penjualan.flag_active','1')
+        ->get();
+        $total_penjualan=DB::table('trn_penjualan')
+        ->where('flag_active','1')
+        ->sum('total');
+        $total_pengeluaran=DB::table('trn_pengeluaran')
+        ->where('flag_active','1')
+        ->sum('total');
+        $total_final=$total_penjualan-$total_pengeluaran;
+        $pengeluaran=DB::table('trn_pengeluaran')
+        ->join('jenis_pengeluaran','trn_pengeluaran.id_jenis_pengeluaran','=','jenis_pengeluaran.id_jenis_pengeluaran')
+        ->select('trn_pengeluaran.jumlah','trn_pengeluaran.harga_satuan','trn_pengeluaran.total','trn_pengeluaran.tanggal',DB::raw("'pengeluaran' as tipe, concat('Pengeluaran untuk ',lower(jenis_pengeluaran.jenis_pengeluaran)) as keterangan"))
+        ->where('trn_pengeluaran.flag_active','1')
+        ->get();
+        $merge=$penjualan->merge($pengeluaran)->sortBy('tanggal');
+        $data=$merge->all();
+        
+        return Response::json(array(
+            'data'=>$data,
+            'total_jual'=>$total_penjualan,
+            'total_keluar'=>$total_pengeluaran,
+            'saldo'=>$total_final,
+        ));;
     }
 }

@@ -42,7 +42,7 @@
                         <th>{{'Username'}}</th>
                         <th>{{'Email'}}</th>
                         <th>{{'Status aktif'}}</th>
-                        <th>Action</th>
+                        <th style="text-align:center;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,7 +52,7 @@
                         <td style="vertical-align:middle;">{{$pegawai->name}}</td>
                         <td style="vertical-align:middle;">{{$pegawai->username}}</td>
                         <td style="vertical-align:middle;">{{$pegawai->email}}</td>
-                        <td style="vertical-align:middle;">
+                        <td style="vertical-align:middle;  text-align:center;">
                             @if ($pegawai->flag_active==='1')
                                 Aktif
                             @else

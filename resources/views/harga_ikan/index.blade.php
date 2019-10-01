@@ -41,7 +41,7 @@
                         <th>{{'Panjang dari (cm)'}}</th>
                         <th>{{'Panjang sampai (cm)'}}</th>
                         <th>{{'Harga per ekor'}}</th>
-                        <th>Action</th>
+                        <th style="text-align:center;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,7 +52,7 @@
                         <td style="vertical-align:middle;">{{$tarif->size_from_cm}}</td>
                         <td style="vertical-align:middle;">{{$tarif->size_to_cm}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($tarif->harga_per_ekor,0,',','.')}}</td>
-                        <td style="vertical-align:middle; width:20%;">
+                        <td style="vertical-align:middle; width:20%; text-align:center;">
                             <a href="{{route('tarif.edit',$tarif->id_ukuran)}}"
                                 class="btn btn btn-info hidden-sm-down ">Edit</a>
                             <form action="{{ route('tarif.destroy', $tarif->id_ukuran) }}" method="POST" class="btn"

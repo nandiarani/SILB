@@ -41,7 +41,7 @@
                         <th>{{'Jumlah'}}</th>
                         <th>{{'Harga satuan'}}</th>
                         <th>{{'Total'}}</th>
-                        <th>Action</th>
+                        <th style="text-align:center;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,7 +53,7 @@
                         <td style="vertical-align:middle;">{{$pengeluaran->jumlah}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($pengeluaran->harga_satuan,0,',','.')}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($pengeluaran->total,0,',','.')}}</td>
-                        <td style="vertical-align:middle; width:20%;">
+                        <td style="vertical-align:middle; width:20%; text-align:center;">
                             <a href="{{route('pengeluaran.edit',$pengeluaran->id_pengeluaran)}}" class="btn btn btn-info hidden-sm-down ">Ubah</a>
                             <form action="{{ route('pengeluaran.destroy', $pengeluaran->id_pengeluaran) }}" method="POST" class="btn" style="padding:0px;">
                                 <input type="hidden" name="_method" value="DELETE">
