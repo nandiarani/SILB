@@ -22,10 +22,12 @@
         <div class="col md-12" style="border-bottom:2px solid #d5dae2;margin-bottom:15px;">
             <h4 class="card-title">Pengelolaan Pegawai</h4>
         </div>
-        {{--  <div class="col md-4">asd</div>
-        <div class="col md-3">
-                <input class="col md-3 pull-right form-control form-control-line" type="text" name="" id=""></div>
-        <div class="table-responsive">  --}}
+        @if ($message = Session::get('info'))
+        <div class="alert alert-info alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button> 
+            <strong>{{ $message }}</strong>
+        </div>
+        @endif
             @if (count($pegawais)===0)
                 <div class="col md-12" style="text-align:center; ">
                     <img src="{{asset('assets/icon/empty.png')}}" height="350" width="350" style="margin-top:5%;">

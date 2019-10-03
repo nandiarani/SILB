@@ -64,13 +64,16 @@ class PegawaiController extends Controller
     public function edit($id)
     {
         $pegawai=User::find($id);
+        $name=$pegawai->name;
         if ($pegawai->flag_active=='1') {
             $pegawai->flag_active='0';
+            $msg=' dinonaktifkan';
         } else {
             $pegawai->flag_active='1';
+            $msg=' diaktifkan';
         }
         $pegawai->save();
-        return redirect('/pegawai');
+        return redirect('/pegawai')->with('info',$name.' berhasil'.$msg);
         
     }
 

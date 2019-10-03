@@ -32,8 +32,8 @@ class ModalController extends Controller
      */
     public function create()
     {
-        //
-        return view('modal.create');
+        $today=Carbon::now()->toDateString();
+        return view('modal.create',['today'=>$today]);
     }
 
     /**
@@ -45,13 +45,13 @@ class ModalController extends Controller
     public function store(Request $request)
     {
         $modal= new Modal();
-        $modal->nominal=request('nominal');
+        $modal->nominal=request('nominal');;
         $modal->tanggal=request('tanggal');
         $modal->added_at=Carbon::now()->toDateTimeString();
         $modal->added_by=Auth::user()->id_user;
         $modal->flag_active='1';
         $modal->save();
-        return redirect()->route('modal.index');
+        return redirect()->route('modal.index')->with(['success'=>'Berhasil menambah modal baru!']);
     }
 
     /**
@@ -96,7 +96,7 @@ class ModalController extends Controller
         $modal->updated_at=Carbon::now()->toDateTimeString();
         $modal->updated_by=Auth::user()->id_user;
         $modal->save();
-        return redirect('modal')->with('success','modal updated!');
+        return redirect('modal')->with('info','data modal berhasil diperbaharui!');
     }
 
     /**
@@ -110,7 +110,7 @@ class ModalController extends Controller
         $modal=Modal::find($id_modal);
         $modal->flag_active='0';
         $modal->save();
-        return redirect()->route('modal.index');
+        return redirect('modal')->with('error','data modal berhasil dihapus!');
 
     }
 

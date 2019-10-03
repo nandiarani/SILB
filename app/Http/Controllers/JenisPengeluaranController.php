@@ -43,13 +43,14 @@ class JenisPengeluaranController extends Controller
      */
     public function store(Request $request)
     {
+        $jenis=request('jenis_pengeluaran');
         $jenis_pengeluaran= new Jenis_Pengeluaran();
-        $jenis_pengeluaran->jenis_pengeluaran=request('jenis_pengeluaran');
+        $jenis_pengeluaran->jenis_pengeluaran=$jenis;
         $jenis_pengeluaran->added_at=Carbon::now()->toDateTimeString();
         $jenis_pengeluaran->added_by=Auth::user()->id_user;
         $jenis_pengeluaran->flag_active='1';
         $jenis_pengeluaran->save();
-        return redirect()->route('jenis_pengeluaran.index');
+        return redirect()->route('jenis_pengeluaran.index')->with(['success'=>'Berhasil menambah '.$jenis.'!']);
     }
 
     /**
@@ -95,8 +96,9 @@ class JenisPengeluaranController extends Controller
     {
     
         $jenis_pengeluaran=Jenis_Pengeluaran::find($id_jenis_pengeluaran);
+        $jenis=$jenis_pengeluaran->jenis_pengeluaran;
         $jenis_pengeluaran->flag_active='0';
         $jenis_pengeluaran->save();
-        return redirect()->route('jenis_pengeluaran.index');
+        return redirect('jenis_pengeluaran')->with(['error'=>'Berhasil menghapus jenis '.$jenis.'!']);
     }
 }

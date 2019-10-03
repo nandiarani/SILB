@@ -24,6 +24,18 @@
             </div>
         <a href="{{route('jenis_pengeluaran.create')}}" class="btn waves-effect waves-light btn btn-success pull-right hidden-sm-down">Tambah</a>
         <div class="table-responsive">
+                @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-block">
+                    <button type="button" class="close" data-dismiss="alert">×</button> 
+                    <strong>{{ $message }}</strong>
+                </div>
+                @endif
+                @if ($message = Session::get('error'))
+                <div class="alert alert-danger alert-block">
+                    <button type="button" class="close" data-dismiss="alert">×</button> 
+                    <strong>{{ $message }}</strong>
+                </div>
+                @endif
             @if (count($jenis_pengeluarans)===0)
             <div class="col md-12" style="text-align:center;margin-top:5%;">
                     <img src="{{asset('assets/icon/empty.png')}}" height="350" width="350">
@@ -46,11 +58,8 @@
                                         <td style="vertical-align:middle;">{{$i++}}</td>
                                         <td style="vertical-align:middle;">{{$jenis_pengeluaran->jenis_pengeluaran}}</td>
                                         <td style="vertical-align:middle; width:20%; text-align:center;">
-                                                <form action="{{ route('jenis_pengeluaran.destroy', $jenis_pengeluaran->id_jenis_pengeluaran) }}" method="POST" class="btn" style="padding:0px;">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                    <input type="submit" class="btn btn btn-danger hidden-sm-down" value="Delete">
-                                                </form>
+                                            <button type="button" onclick="deleteItem({!!$jenis_pengeluaran->id_jenis_pengeluaran!!})" class="btn btn btn-danger hidden-sm-down" >Delete</button>
+                                            <meta name="csrf-token" content="{{ csrf_token() }}" />
                                         </td>
                                     </tr>
                                 @endforeach
@@ -62,4 +71,28 @@
     </div>
 </div>
 
+@endsection
+@section('js')
+
+    <script type="text/javascript">
+        jQuery.ajaxSetup({
+            headers: {            
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')        
+            }    
+        });
+        function deleteItem(id_jenis_pengeluaran){
+            var r= confirm("Are u sure to delete?");
+            if(r==true){
+                var project_url="{!! URL::to('/')!!}";
+                $.ajax({
+                    url:'/jenis_pengeluaran/'+id_jenis_pengeluaran,
+                    type:'POST',
+                    data:{_method: 'delete' },
+                    success: function(result) {
+                        window.location.href = "{{URL::to('/jenis_pengeluaran')}}"
+                    }
+                });
+            }
+        }
+    </script>
 @endsection

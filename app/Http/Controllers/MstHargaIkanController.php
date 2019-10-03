@@ -52,7 +52,7 @@ class MstHargaIkanController extends Controller
         $tarif->added_by=Auth::user()->id_user;
         $tarif->flag_active='1';
         $tarif->save();
-        return redirect()->route('tarif.index');
+        return redirect()->route('tarif.index')->with('success','Kategori harga ikan baru berhasil ditambah!');
 
     }
 
@@ -106,7 +106,7 @@ class MstHargaIkanController extends Controller
         $old->updated_by=Auth::user()->id_user;
         $old->flag_active='0';
         $old->save();
-        return redirect('tarif')->with('success','tarif updated!');
+        return redirect('tarif')->with('info','Kategori harga ikan berhasil diperbaharui!');
         //
     }
 
@@ -123,6 +123,6 @@ class MstHargaIkanController extends Controller
         $tarif->updated_by=Auth::user()->id_user;
         $tarif->flag_active='0';
         $tarif->save();
-        return redirect('tarif')->with('success','tarif deleted!');
+        return redirect('tarif')->with('error','Kategori harga ikan berhasil dihapus!');
     }
 }

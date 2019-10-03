@@ -23,7 +23,7 @@
                     <div class="form-group">
                             <label class="col-md-12">Tanggal</label>
                             <div class="col-md-12">
-                                <input type="date" name="tanggal" placeholder="" class="form-control form-control-line" required autofocus>
+                                <input type="date" name="tanggal" placeholder="" class="form-control form-control-line" value="{{$today}}" required autofocus>
                             </div>
                     </div>
                     <div class="form-group">

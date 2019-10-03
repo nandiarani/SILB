@@ -59,7 +59,7 @@ class TrnPengeluaranController extends Controller
         $pengeluaran->added_by=Auth::user()->id_user;
         $pengeluaran->flag_active='1';
         $pengeluaran->save();
-        return redirect('/pengeluaran');
+        return redirect('/pengeluaran')->with('success','Transaksi pengeluaran berhasil dimasukkan!');
     }
 
     /**
@@ -105,7 +105,7 @@ class TrnPengeluaranController extends Controller
         $pengeluaran->updated_at=Carbon::now()->toDateTimeString();
         $pengeluaran->updated_by=Auth::user()->id_user;
         $pengeluaran->save();
-        return redirect('/pengeluaran');
+        return redirect('/pengeluaran')->with('info','Transaksi pengeluaran berhasil diperbaharui!');
     }
 
     /**
@@ -119,6 +119,6 @@ class TrnPengeluaranController extends Controller
         $pengeluaran= Trn_Pengeluaran::find($id_pengeluaran);
         $pengeluaran->flag_active='0';
         $pengeluaran->save();
-        return redirect('/pengeluaran');
+        return redirect('/pengeluaran')->with('error','Transaksi pengeluaran berhasil dihapus!');
     }
 }

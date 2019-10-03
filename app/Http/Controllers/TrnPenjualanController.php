@@ -81,7 +81,7 @@ class TrnPenjualanController extends Controller
         $penjualan->added_by=Auth::user()->id_user;
         $penjualan->flag_active='1';
         $penjualan->save();
-        return redirect('/penjualan');
+        return redirect('/penjualan')->with('success','Transaksi penjualan berhasil dimasukkan!');
     }
 
     /**
@@ -138,7 +138,7 @@ class TrnPenjualanController extends Controller
         $penjualan->updated_at=Carbon::now()->toDateTimeString();
         $penjualan->updated_by=Auth::user()->id_user;
         $penjualan->save();
-        return redirect('/penjualan');
+        return redirect('/penjualan')->with('info','Transaksi penjualan berhasil diperbaharui!');
     }
 
     /**
@@ -152,6 +152,6 @@ class TrnPenjualanController extends Controller
         $penjualan=Trn_Penjualan::find($id_penjualan);
         $penjualan->flag_active='0';
         $penjualan->save();
-        return redirect('/penjualan');
+        return redirect('/penjualan')->with('error','Transaksi penjualan berhasil dihapus!');
     }
 }
