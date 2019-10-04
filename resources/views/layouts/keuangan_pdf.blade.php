@@ -75,7 +75,12 @@
 				<td>{{date('d-m-Y', strtotime($d->tanggal))}}</td>
 				<td>{{$d->tipe}}</td>
                 <td class="left">{{$d->keterangan}}</td>
+                @if ($d->harga_satuan==="")
+				<td class="left total"></td>
+                @else
 				<td class="left total">Rp. {{number_format($d->harga_satuan,0,',','.')}}</td>
+                    
+                @endif
                 <td>{{$d->jumlah}}</td>
                 @if ($d->tipe==='Penjualan')
                     <td></td>
@@ -90,12 +95,21 @@
                 <td colspan="6">Total</td>
 				<td>Rp. {{number_format($total_keluar,0,',','.')}}</td>
 				<td>Rp. {{number_format($total_jual,0,',','.')}}</td>
-			</tr><tr class="footer">
-                <td colspan="6">Profit periode {{$periode}}</td>
+            </tr>
+            <tr class="footer">
+                <td colspan="6">Laba kotor</td>
                 @if ($saldo>0)                
     				<td colspan="2">Rp. {{number_format($saldo,0,',','.')}}</td>
                 @else
 				    <td colspan="2" style="color:red;">Rp. {{number_format($saldo,0,',','.')}}</td>
+                @endif
+			</tr>
+            <tr class="footer">
+                <td colspan="6">Laba bersih</span></td>
+                @if ($profit>0)                
+    				<td colspan="2">Rp. {{number_format($profit,0,',','.')}}</td>
+                @else
+				    <td colspan="2" style="color:red;">Rp. {{number_format($profit,0,',','.')}}</td>
                 @endif
 			</tr>
 		</tbody>
