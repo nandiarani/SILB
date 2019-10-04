@@ -122,7 +122,7 @@ class HomeController extends Controller
         if ($month==0) {//tahunan
             $penjualan=DB::table('trn_penjualan')
             ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-            ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),', penjualan ke-',trn_penjualan.penjualan_ke,', tahap ke-',trn_penjualan.tahap) as keterangan"))
+            ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran)) as keterangan"))
             ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=?',$year)
             ->get();
             $pengeluaran=DB::table('trn_pengeluaran')
@@ -140,7 +140,7 @@ class HomeController extends Controller
         } else {//bulanan  
             $penjualan=DB::table('trn_penjualan')
             ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-            ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),', penjualan ke-',trn_penjualan.penjualan_ke,', tahap ke-',trn_penjualan.tahap) as keterangan"))
+            ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran)) as keterangan"))
             ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=? and month(trn_penjualan.tanggal)=?',[$year,$month])
             ->get();
             $pengeluaran=DB::table('trn_pengeluaran')
@@ -166,6 +166,7 @@ class HomeController extends Controller
         $t2_pengeluaran=DB::table('trn_pengeluaran')
                     ->where('flag_active','=','1')
                     ->sum('total');
+        $total_profit=-200000;
         //dd($t2_modal,$t2_pengeluaran,$t2_penjualan);
         $total_final=$total_penjualan-$total_pengeluaran;
         $merge=$penjualan->merge($pengeluaran)->sortBy('tanggal');
@@ -176,6 +177,7 @@ class HomeController extends Controller
                                                      'total_jual'=>$total_penjualan,
                                                      'total_keluar'=>$total_pengeluaran,
                                                      'saldo'=>$total_final,
+                                                     'profit'=>$total_profit,
                                                      'today'=>$today,
                                                      'periode'=>$periode]);
         return $pdf->stream('laporan-keuangan-pdf');

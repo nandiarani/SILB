@@ -91,15 +91,7 @@
 				<td>Rp. {{number_format($total_keluar,0,',','.')}}</td>
 				<td>Rp. {{number_format($total_jual,0,',','.')}}</td>
 			</tr><tr class="footer">
-                <td colspan="6">Sisa modal </td>
-                @if ($saldo>0)                
-    				<td colspan="2">Rp. {{number_format($saldo,0,',','.')}}</td>
-                @else
-				    <td colspan="2" style="color:red;">Rp. {{number_format($saldo,0,',','.')}}</td>
-                @endif
-			</tr>
-			<tr class="footer">
-                <td colspan="6">Laba</td>
+                <td colspan="6">Profit periode {{$periode}}</td>
                 @if ($saldo>0)                
     				<td colspan="2">Rp. {{number_format($saldo,0,',','.')}}</td>
                 @else

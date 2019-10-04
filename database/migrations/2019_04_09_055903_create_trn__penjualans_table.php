@@ -15,8 +15,6 @@ class CreateTrnPenjualansTable extends Migration
     {
         Schema::create('trn_penjualan', function (Blueprint $table) {
             $table->increments('id_penjualan');
-            $table->integer('tahap')->unsigned()->nullable();
-            $table->integer('penjualan_ke')->unsigned()->nullable();
             $table->integer('jumlah_ikan')->unsigned()->nullable();
             $table->integer('id_ukuran')->nullable();
             $table->float('total',20,2)->nullable();

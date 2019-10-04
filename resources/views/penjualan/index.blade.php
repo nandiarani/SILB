@@ -55,8 +55,6 @@
                     <tr>
                         <th>{{'#'}}</th>
                         <th>{{'Tanggal'}}</th>
-                        <th>{{'Tahap'}}</th>
-                        <th>{{'Penjualan ke'}}</th>
                         <th>{{'Jumlah ikan'}}</th>
                         <th>{{'Ukuran'}}</th>
                         <th>{{'Harga Per ekor'}}</th>
@@ -70,8 +68,6 @@
                     <tr>
                         <td style="vertical-align:middle;">{{$i++}}</td>
                         <td style="vertical-align:middle;">{{ date('d-m-Y', strtotime($penjualan->tanggal))}}</td>
-                        <td style="vertical-align:middle;">{{$penjualan->tahap}}</td>
-                        <td style="vertical-align:middle;">{{$penjualan->penjualan_ke}}</td>
                         <td style="vertical-align:middle;">{{$penjualan->jumlah_ikan}}</td>
                         <td style="vertical-align:middle;">{{$penjualan->ukuran}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($penjualan->harga_per_ekor,0,',','.')}}</td>

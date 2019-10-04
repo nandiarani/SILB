@@ -39,18 +39,6 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-12">Tahap</label>
-                    <div class="col-md-12">
-                        <input type="number" name="tahap" placeholder="" min="0" class="form-control form-control-line" required autofocus>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-12">Penjualan ke</label>
-                    <div class="col-md-12">
-                        <input type="number" name="penjualan_ke" placeholder="" min="0" class="form-control form-control-line" required autofocus>
-                    </div>
-                </div>
-                <div class="form-group">
                         <label class="col-md-12">Jumlah ikan</label>
                         <div class="col-md-12">
                             <input type="number" id="jumlah" name="jumlah" placeholder="" min="0" class="form-control form-control-line" required autofocus>

@@ -43,18 +43,6 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-12">Tahap</label>
-                    <div class="col-md-12">
-                        <input type="number" name="tahap" placeholder="" min="0" class="form-control form-control-line" required autofocus value="{{$penjualan->tahap}}">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-12">Penjualan ke</label>
-                    <div class="col-md-12">
-                        <input type="number" name="penjualan_ke" placeholder="" min="0" class="form-control form-control-line" required autofocus value="{{$penjualan->penjualan_ke}}">
-                    </div>
-                </div>
                 
                 <div class="form-group">
                     <label class="col-md-12">Jumlah ikan</label>

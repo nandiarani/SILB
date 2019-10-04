@@ -71,8 +71,6 @@ class TrnPenjualanController extends Controller
     public function store(Request $request)
     {
         $penjualan = new Trn_Penjualan();
-        $penjualan->tahap= request('tahap');
-        $penjualan->penjualan_ke=request('penjualan_ke');
         $penjualan->jumlah_ikan=request('jumlah');
         $penjualan->id_ukuran=request('harga_per_ekor');
         $penjualan->total=request('total');
@@ -129,8 +127,6 @@ class TrnPenjualanController extends Controller
     public function update(Request $request, $id_penjualan)
     {
         $penjualan = Trn_Penjualan::find($id_penjualan);
-        $penjualan->tahap= request('tahap');
-        $penjualan->penjualan_ke=request('penjualan_ke');
         $penjualan->jumlah_ikan=request('jumlah');
         $penjualan->id_ukuran=request('harga_per_ekor');
         $penjualan->total=request('total');
