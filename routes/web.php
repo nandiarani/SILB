@@ -19,6 +19,7 @@ Auth::routes(['verify'=>true]);
 
 Route::post('report', 'HomeController@report')->name('reportDetail');//->middleware(['auth','verified','activated']);
 Route::get('fetchChart/{month}/{year?}', 'HomeController@fetchChart');//->middleware(['auth','verified','activated']);
+Route::get('fetchMonth/{year}','HomeController@fetchMonth');
 Route::get('home', 'HomeController@index')->name('home')->middleware(['auth','verified','activated']);
 Route::resource('modal', 'ModalController')->middleware(['auth','owner']);
 Route::resource('tarif', 'MstHargaIkanController')->middleware(['auth','owner']);

@@ -30,23 +30,34 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $dropdownmonth=DB::select("select month(tanggal) as mon, monthname(tanggal) as month from trn_penjualan union DISTINCT select month(tanggal) as mon, monthname(tanggal) as month from trn_pengeluaran order by mon");
-        $dropdownyear=DB::select("select year(tanggal) as year from trn_penjualan union DISTINCT select year(tanggal) as year from trn_pengeluaran order by year");
-        return view('home',compact('dropdownmonth','dropdownyear'));
+        // $dropdownmonth=DB::select("select month(tanggal) as mon, monthname(tanggal) as month from trn_penjualan union DISTINCT select month(tanggal) as mon, monthname(tanggal) as month from trn_pengeluaran where flag_active='1' order by mon");
+        $years=DB::select("select year(tanggal) as year from trn_penjualan union DISTINCT select year(tanggal) as year from trn_pengeluaran order by year");
+        return view('home',['years'=>$years]);
+    }
+    public function fetchMonth($year)
+    {
+        $month=DB::select("select * from 
+                                    (
+                                        (select month(tanggal) as mon, monthname(tanggal) as month from trn_penjualan WHERE flag_active='1' and year(tanggal)=?) 
+                                        union (select month(tanggal) as mon, monthname(tanggal) as month from trn_pengeluaran WHERE flag_active='1' and year(tanggal)=?)
+                                    ) a
+                                    order by a.mon",[$year,$year]);
+        return json_encode($month);
     }
     function fetchChart($month,$year){        
+               
         if ($month==0) {
             $penjualan=DB::table('trn_penjualan')
                     ->select(DB::raw('concat("1 ",date_format(tanggal,"%M %Y")) as period, sum(total) as penjualan , 0 as pengeluaran'))
                     ->whereraw('flag_active="1" and year(tanggal)=?',$year)
                     ->groupBy(DB::raw('period'))
-                    ->orderBy('tanggal','ASC')
+                    ->orderBy(DB::raw('STR_TO_DATE(period, "%c %M %Y")'))
                     ->get();
             $pengeluaran=DB::table('trn_pengeluaran')
                     ->select(DB::raw('concat("1 ",date_format(tanggal,"%M %Y")) as period, sum(total) as pengeluaran , 0 as penjualan'))
                     ->whereraw('flag_active="1" and year(tanggal)=?',$year)
                     ->groupBy(DB::raw('period'))
-                    ->orderBy('tanggal','ASC')
+                    ->orderBy(DB::raw('STR_TO_DATE(period, "%c %M %Y")'))
                     ->get();
         } else {
             $penjualan=DB::table('trn_penjualan')
@@ -55,23 +66,31 @@ class HomeController extends Controller
                     ->groupBy(DB::raw('tanggal'))
                     ->orderBy('tanggal','ASC')
                     ->get();
+                    
             $pengeluaran=DB::table('trn_pengeluaran')
                     ->select(DB::raw('tanggal as period, sum(total) as pengeluaran , 0 as penjualan'))
                     ->whereraw('flag_active="1" and year(tanggal)=? and month(tanggal)=?',[$year,$month])
                     ->groupBy(DB::raw('tanggal'))
                     ->orderBy('tanggal','ASC')
-                    ->get();            
+                    ->get();    
+                            
         }
         //merge 2 collection
-        foreach ($penjualan as $sell) {
+        if ($penjualan->count() == 0) {
             foreach ($pengeluaran as $buy) {
-                if($sell->period===$buy->period){       
-                    $sell->pengeluaran=$buy->pengeluaran;
-                }
-                else {
-                    if(!$penjualan->contains('period',$buy->period)){
-
-                        $penjualan->push($buy);
+                    $penjualan->push($buy);
+            }
+        } else {
+            foreach ($penjualan as $sell) {
+                foreach ($pengeluaran as $buy) {
+                    if($sell->period===$buy->period){       
+                        $sell->pengeluaran=$buy->pengeluaran;
+                    }
+                    else {
+                        if(!$penjualan->contains('period',$buy->period)){
+    
+                            $penjualan->push($buy);
+                        }
                     }
                 }
             }
@@ -92,9 +111,7 @@ class HomeController extends Controller
             
             
         }
-        // dd($penjualan);
         $penjualan=$penjualan->values();
-        // dd($penjualan);
         //sort done
         return json_encode($penjualan);
     }
@@ -120,9 +137,7 @@ class HomeController extends Controller
         $month=request('month');
         $year=request('year');
         if ($month==0) {//tahunan
-            $periode=$year.'-1-01';
-            $start=Carbon::createFromFormat('Y-n-d', $periode)->format('Y-n-d');
-            $end=Carbon::createFromFormat('Y-n-d', $periode)->addYears(1)->subDays(1)->format('Y-n-d');
+        //-----------------------tabel keuangan---------------------------------------------------
             $penjualan=DB::table('trn_penjualan')
             ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
             ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
@@ -133,22 +148,23 @@ class HomeController extends Controller
             ->select('trn_pengeluaran.jumlah','trn_pengeluaran.harga_satuan','trn_pengeluaran.total','trn_pengeluaran.tanggal',DB::raw("'Pengeluaran' as tipe, concat('Pengeluaran untuk ',lower(jenis_pengeluaran.jenis_pengeluaran)) as keterangan"))
             ->whereraw('trn_pengeluaran.flag_active="1" and year(trn_pengeluaran.tanggal)=?',$year)
             ->get();
-            $modal=DB::table('modal')
-                ->select(DB::raw("'' as jumlah, '' as harga_satuan"),'nominal as total','tanggal',DB::raw("'Modal' as tipe, 'Modal masuk' as keterangan"))
-                ->whereraw('modal.flag_active="1" and modal.tanggal between ? and ?',[$start,$end])
-                ->get();
             $total_penjualan=DB::table('trn_penjualan')
             ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=?',$year)
             ->sum('total');
             $total_pengeluaran=DB::table('trn_pengeluaran')
             ->whereraw('trn_pengeluaran.flag_active="1" and year(trn_pengeluaran.tanggal)=?',$year)
             ->sum('total');
-            $periode_sum=Carbon::createFromFormat('Y-n-d', $periode)->addYears(1)->subDays(1)->format('Y-n-d');
+
+        //-----------------------tabel keuangan---------------------------------------------------
+            $total_modal=DB::table('modal')
+                ->whereraw('modal.flag_active="1" and year(modal.tanggal)=?',$year)
+                ->sum('nominal');
+
+            $periode=$year.'-1-01';
+            $end=Carbon::createFromFormat('Y-n-d', $periode)->addYears(1)->format('Y-n-d');
             $periode=$year;
         } else {//bulanan  
-            $periode=$year.'-'.$month.'-01';
-            $start=Carbon::createFromFormat('Y-n-d', $periode)->format('Y-n-d');
-            $end=Carbon::createFromFormat('Y-n-d', $periode)->addMonths(1)->subDays(1)->format('Y-n-d');
+            //-----------------------tabel keuangan---------------------------------------------------            
             $penjualan=DB::table('trn_penjualan')
             ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
             ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
@@ -159,42 +175,62 @@ class HomeController extends Controller
             ->select('trn_pengeluaran.jumlah','trn_pengeluaran.harga_satuan','trn_pengeluaran.total','trn_pengeluaran.tanggal',DB::raw("'Pengeluaran' as tipe, concat('Pengeluaran untuk ',lower(jenis_pengeluaran.jenis_pengeluaran)) as keterangan"))
             ->whereraw('trn_pengeluaran.flag_active="1" and year(trn_pengeluaran.tanggal)=? and month(trn_pengeluaran.tanggal)=?',[$year,$month])
             ->get();
-            $modal=DB::table('modal')
-                ->select(DB::raw("'' as jumlah, '' as harga_satuan"),'nominal as total','tanggal',DB::raw("'Modal' as tipe, 'Modal masuk' as keterangan"))
-                ->whereraw('modal.flag_active="1" and modal.tanggal between ? and ?',[$start,$end])
-                ->get();
             $total_penjualan=DB::table('trn_penjualan')
             ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=? and month(trn_penjualan.tanggal)=?',[$year,$month])
             ->sum('total');
             $total_pengeluaran=DB::table('trn_pengeluaran')
             ->whereraw('trn_pengeluaran.flag_active="1" and year(trn_pengeluaran.tanggal)=? and month(trn_pengeluaran.tanggal)=?',[$year,$month])
             ->sum('total');
-            $periode_sum=Carbon::createFromFormat('Y-n-d', $periode)->addMonths(1)->format('Y-n-d');
+
+            //-----------------------tabel profit---------------------------------------------------
+            $total_modal=DB::table('modal')
+                        ->whereraw('modal.flag_active="1" and year(modal.tanggal)=? and month(modal.tanggal)=?',[$year,$month])
+                        ->sum('nominal');
+
+            $periode=$year.'-'.$month.'-01';
+            $end=Carbon::createFromFormat('Y-n-d', $periode)->addMonths(1)->format('Y-n-d');
             $periode=$year.'-'.$month;
             $periode=Carbon::createFromFormat('Y-n', $periode)->format('F Y');
         }
         
-        $sum_modal=DB::table('modal')
-        ->whereraw('modal.flag_active="1" and modal.tanggal<=?',[$periode_sum])
-        ->sum('nominal');
-        $sum_pengeluaran=DB::table('trn_pengeluaran')
-        ->whereraw('trn_pengeluaran.flag_active="1" and trn_pengeluaran.tanggal<=?',[$periode_sum])
-        ->sum('total');
-        $sum_penjualan=DB::table('trn_penjualan')
-        ->whereraw('trn_penjualan.flag_active="1" and trn_penjualan.tanggal<=?',[$periode_sum])
-        ->sum('total');
-        $total_profit=$sum_penjualan-$sum_pengeluaran-$sum_modal;
+        //table profit
+            //keseluruhan
+                $modal_after=DB::table('modal')
+                ->whereraw('modal.flag_active="1" and modal.tanggal<?',[$end])
+                ->sum('nominal');
+                $pengeluaran_after=DB::table('trn_pengeluaran')
+                ->whereraw('trn_pengeluaran.flag_active="1" and trn_pengeluaran.tanggal<?',[$end])
+                ->sum('total');
+                $penjualan_after=DB::table('trn_penjualan')
+                ->whereraw('trn_penjualan.flag_active="1" and trn_penjualan.tanggal<?',[$end])
+                ->sum('total');
+            //perperiode
+                $modal_before=$modal_after-$total_modal;
+                $penjualan_before=$penjualan_after-$total_penjualan;
+                $pengeluaran_before=$pengeluaran_after-$total_pengeluaran;
+            //total
+        $total_profit=$penjualan_after-$pengeluaran_after-$modal_after;
+        $tabel_profit= ['m_before'=>$modal_before,
+                        'm_now'=>$total_modal,
+                        'm_after'=>$modal_after,
+                        'o_before'=>$pengeluaran_before,
+                        'o_now'=>$total_pengeluaran,
+                        'o_after'=>$pengeluaran_after,
+                        's_before'=>$penjualan_before,
+                        's_now'=>$total_penjualan,
+                        's_after'=>$penjualan_after,
+                        'profit'=>$total_profit];
         $total_final=$total_penjualan-$total_pengeluaran;
-        $merge=$penjualan->merge($pengeluaran)->merge($modal)->sortBy('tanggal');
-        $data=$merge->all();
-        $data=array_values($data);
+        $merge=$penjualan->merge($pengeluaran)->sortBy('tanggal');
+        $tabel_keuangan=$merge->all();
+        $tabel_keuangan=array_values($tabel_keuangan);
         $today=Carbon::now();
         $title='laporan-keuangan-'.$today->format('j/m/Y');
-    	$pdf = PDF::loadview('layouts.keuangan_pdf',['datas'=>$data,
+    	$pdf = PDF::loadview('layouts.keuangan_pdf',['tabel_keuangan'=>$tabel_keuangan,
                                                      'total_jual'=>$total_penjualan,
                                                      'total_keluar'=>$total_pengeluaran,
                                                      'saldo'=>$total_final,
-                                                     'profit'=>$total_profit,
+                                                     'tabel_profit'=>$tabel_profit,
                                                      'today'=>$today->format('j F Y H:i'),
                                                      'periode'=>$periode]);
         return $pdf->stream($title.'.pdf');

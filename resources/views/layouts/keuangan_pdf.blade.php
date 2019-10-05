@@ -14,8 +14,15 @@
             font: 13px;
             margin: 2px;
         }
+        h3{
+            font-family: 'Century Gothic';
+            font-weight: 700;
+        }
         .left{
             text-align: left;
+        }
+        .right{
+            text-align:right;
         }
         .left.total{
             padding-left: 20px;
@@ -40,7 +47,9 @@
             border-bottom: 2px solid #c8ced3;
             font-weight: bold;
         }
-
+        .minus{
+            color: red;
+        }
         .footer td{
             font: 13px sans-serif;
             font-weight: bold;
@@ -49,11 +58,10 @@
     </style>
     <br>
 	<center>
-        <h3>LAPORAN KEUANGAN</h3>
-        <h4>{{$periode}}</h4>
+        <h3>LAPORAN KEUANGAN {{$periode}}</h3>
 	</center>
 <br>
-<p>Per {{$today}}</p>
+<p>Dibuat: {{$today}}</p>
 	<table class='table table-bordered'>
 		<thead>
 			<tr>
@@ -69,7 +77,7 @@
 		</thead>
 		<tbody>
 			@php $i=1 @endphp
-			@foreach($datas as $d)
+			@foreach($tabel_keuangan as $d)
 			<tr>
                 <td>{{ $i++ }}</td>
 				<td>{{date('d-m-Y', strtotime($d->tanggal))}}</td>
@@ -101,19 +109,72 @@
                 @if ($saldo>0)                
     				<td colspan="2">Rp. {{number_format($saldo,0,',','.')}}</td>
                 @else
-				    <td colspan="2" style="color:red;">Rp. {{number_format($saldo,0,',','.')}}</td>
-                @endif
-			</tr>
-            <tr class="footer">
-                <td colspan="6">Laba bersih</span></td>
-                @if ($profit>0)                
-    				<td colspan="2">Rp. {{number_format($profit,0,',','.')}}</td>
-                @else
-				    <td colspan="2" style="color:red;">Rp. {{number_format($profit,0,',','.')}}</td>
+				    <td colspan="2" class="minus">Rp. {{number_format($saldo,0,',','.')}}</td>
                 @endif
 			</tr>
 		</tbody>
 	</table>
-
+<br><br>
+<h3 style="text-align:center;">Tabel Profit</h6>
+<div style="margin-left:25%%;width:50%;padding-top:10px;">
+        <table class='table table-bordered'>
+            <thead>
+                <tr>
+                    <th style="width:50%">Keterangan</th>
+                    <th style="width:25%">Nominal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{-- modal --}}
+                    <tr>
+                        <td class="left">Modal sebelum {{$periode}}</td>
+                        <td>Rp. {{number_format($tabel_profit['m_before'],0,',','.')}}</td>
+                    </tr>
+                    <tr>
+                        <td class="left">Modal {{$periode}}</td>
+                        <td>Rp. {{number_format($tabel_profit['m_now'],0,',','.')}}</td>
+                    </tr>
+                    <tr>
+                        <td class="right">Total Modal</td>
+                        <td>Rp. {{number_format($tabel_profit['m_after'],0,',','.')}}</td>
+                    </tr>
+                {{-- pengeluaran --}}
+                    <tr>
+                        <td class="left">Pengeluaran sebelum {{$periode}}</td>
+                        <td>Rp. {{number_format($tabel_profit['o_before'],0,',','.')}}</td>
+                    </tr>
+                    <tr>
+                        <td class="left">Pnegeluaran {{$periode}}</td>
+                        <td>Rp. {{number_format($tabel_profit['o_now'],0,',','.')}}</td>
+                    </tr>
+                    <tr>
+                        <td class="right">Total Pengeluaran</td>
+                        <td>Rp. {{number_format($tabel_profit['o_after'],0,',','.')}}</td>
+                    </tr>
+                {{-- penjualan --}}
+                    <tr>
+                        <td class="left">Penjualan sebelum {{$periode}}</td>
+                        <td>Rp. {{number_format($tabel_profit['s_before'],0,',','.')}}</td>
+                    </tr>
+                    <tr>
+                        <td class="left">Penjualan {{$periode}}</td>
+                        <td>Rp. {{number_format($tabel_profit['s_now'],0,',','.')}}</td>
+                    </tr>
+                    <tr>
+                        <td  class="right">Total Penjualan</td>
+                        <td>Rp. {{number_format($tabel_profit['s_after'],0,',','.')}}</td>
+                    </tr>
+                    <tr>
+                        <td class="right">Laba bersih</td>
+                        
+                        @if ($tabel_profit['profit']>0)                
+                        <td>Rp. {{number_format($tabel_profit['profit'],0,',','.')}}</td>
+                        @else
+                        <td class="minus">Rp. {{number_format($tabel_profit['profit'],0,',','.')}}</td>
+                        @endif
+                    </tr>
+            </tbody>
+        </table>
+</div>
 </body>
 </html>

@@ -27,23 +27,19 @@
                                 
                                     <div class="col-md-2">
                                         <select name="tipe" id="tipe" class="form-control form-control-line">
-                                                <option value="Bulanan" selected>Bulanan</option>
-                                                <option value="Tahunan">Tahunan</option>
+                                                <option value="Bulanan" >Bulanan</option>
+                                                <option value="Tahunan" selected>Tahunan</option>
                                         </select>
                                     </div>
                                     <div class="col-md-2">
                                         <select name="year" id="year" class="form-control form-control-line">
-                                            @foreach ($dropdownyear as $year)
+                                            @foreach ($years as $year)
                                                 <option value="{{$year->year}}" selected>{{$year->year}}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="col-md-2">
-                                        <select name="month" id="month" class="form-control form-control-line">
-                                                <option value="0">-</option>
-                                                @foreach ($dropdownmonth as $month)
-                                                    <option value="{{$month->mon}}">{{$month->month}}</option>
-                                                @endforeach
+                                        <select name="month" id="month" class="form-control form-control-line" style="visibility: hidden;">
                                         </select>
                                     </div>
                                     <div class="col-sm-4" style="padding-right:0px;">
@@ -61,7 +57,55 @@
     
 @section('js')
     <script type="text/javascript">
-    $month=0;
+        
+    $(document).ready(function(){
+        $.month();
+        $.chart();
+        if($('#tipe').val()==='Tahunan'){
+            $('#month').css("visibility","hidden");
+            $('#month').val('0');
+        }
+        else{
+            $('#month').css("visibility","visible");
+            $('#month').val('0');
+        }
+        $('#year').change(function(){
+            $.chart();
+            $.month();
+        });
+        $('#month').change(function(){
+            $.chart();
+        });
+        $('#tipe').change(function(){
+            var tipe=$(this).find(":selected").val();
+            if(tipe==='Tahunan'){
+                $('#month').css("visibility","hidden");
+                $('#month').val('0');
+                $.chart(); 
+            }
+            else{
+                $('#month').css("visibility","visible");
+                $('#month').val('0');
+            }
+        });
+    });
+    $.month=function(){
+        $year=$('#year').val();
+        $('#month').empty();
+        $.ajax({
+            url: '/fetchMonth/' + $year,
+            type: "GET",
+            dataType: "json",
+            success: function(result) {
+                $('#month').empty();
+                $('#month').append('<option value="0" selected>-</option>');
+                for(var i in result){
+                    $('#month').append('<option value="'+result[i].mon+'">'+result[i].month+'</option>');       
+                 
+                }
+            }
+        });
+      }
     $.chart=function(){
         $year=$('#year').val();
         $month=$('#month').val();
@@ -91,28 +135,6 @@
             }
         });
       }
-    $(document).ready(function(){
-        
-        $.chart();
-        $('#year').change(function(){
-            $.chart();
-        });
-        $('#month').change(function(){
-            $.chart();
-        });
-        $('#tipe').change(function(){
-            var tipe=$(this).find(":selected").val();
-            if(tipe==='Tahunan'){
-                $('#month').css("visibility","hidden");
-                $('#month').val('0');
-                $month=0;
-                $.chart();
-            }
-            else{
-                $('#month').css("visibility","visible");
-                $('#month').val('0');
-            }
-        });
-    });
+      
     </script>
 @endsection
