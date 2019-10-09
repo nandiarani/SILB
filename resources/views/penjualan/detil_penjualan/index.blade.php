@@ -1,14 +1,14 @@
 @extends('layouts.dashboard') 
 
 @section('title')
-<title>SITran|Pengelolaan Penjualan</title>
+<title>SITran|Detil Penjualan</title>
 @endsection 
 
 @section('preloader')
 <div class="preloader">
     <div class="loader">
         <div class="loader__figure"></div>
-        <p class="loader__label">Loading Penjualan</p>
+        <p class="loader__label">Loading Detil Penjualan</p>
     </div>
 </div>
 @endsection 
@@ -20,9 +20,9 @@
 <div class="card" >
     <div class="card-body">
         <div class="col md-12"  style="border-bottom:2px solid #d5dae2;margin-bottom:15px;">
-            <h4 class="card-title">Pengelolaan Penjualan</h4>
+            <h4 class="card-title">Pengelolaan Detil Penjualan</h4>
         </div>
-        <a href="{{route('penjualan.create')}}" class="btn waves-effect waves-light btn btn-success pull-right hidden-sm-down">Tambah</a>
+        <a href="{{route('detil.create',$id_penjualan)}}" class="btn waves-effect waves-light btn btn-success pull-right hidden-sm-down">Tambah</a>
         <div class="table-responsive">
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success alert-block">
@@ -42,7 +42,7 @@
                     <strong>{{ $message }}</strong>
                 </div>
                 @endif
-            @if (count($penjualans)===0)
+            @if (count($detils)===0)
             <div class="col md-12" style="text-align:center;margin-top:5%;">
                 <img src="{{asset('assets/icon/empty.png')}}" height="350" width="350">
             </div>
@@ -50,42 +50,42 @@
                 <p class="text-muted" style="font-size:200%;">Data kosong :(</p>
             </div>
             @else
+            <input type="hidden" value="{{$id_penjualan}}" id="id_penjualan">
             <table class="table">
                 <thead>
                     <tr>
                         <th>{{'#'}}</th>
-                        <th>{{'Tanggal'}}</th>
+                        <th>{{'Harga Per Ekor'}}</th>
                         <th>{{'Jumlah ikan'}}</th>
-                        <th>{{'Ukuran'}}</th>
-                        <th>{{'Harga Per ekor'}}</th>
-                        <th>{{'Total'}}</th>
+                        <th>{{'Subtotal'}}</th>
                         
                         <th style="text-align:center;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($penjualans as $penjualan)
+                    @foreach ($detils as $detil)
                     <tr>
                         <td style="vertical-align:middle;">{{$i++}}</td>
-                        <td style="vertical-align:middle;">{{ date('d-m-Y', strtotime($penjualan->tanggal))}}</td>
-                        <td style="vertical-align:middle;">{{$penjualan->jumlah_ikan}}</td>
-                        <td style="vertical-align:middle;">{{$penjualan->ukuran}}</td>
-                        <td style="vertical-align:middle;">Rp. {{number_format($penjualan->harga_per_ekor,0,',','.')}}</td>
-                        <td style="vertical-align:middle;">Rp. {{number_format($penjualan->total,0,',','.')}}</td>
+                        <td style="vertical-align:middle;">Rp. {{number_format($detil->harga_per_ekor,0,',','.')}}</td>
+                        <td style="vertical-align:middle;">{{$detil->jumlah_ikan}}</td>
+                        <td style="vertical-align:middle;">Rp. {{number_format($detil->subtotal,0,',','.')}}</td>
                         <td style="vertical-align:middle; width:20%; text-align:center;">
-                            <button type="button" onclick="deleteItem({!!$penjualan->id_penjualan!!})" class="btn btn btn-danger hidden-sm-down" >Delete</button>
+                            <button type="button" onclick="deleteItem({!!$detil->id_detil_penjualan!!})" class="btn btn btn-danger hidden-sm-down" >Hapus</button>
                             <meta name="csrf-token" content="{{ csrf_token() }}" />
-                            <a href="{{route('detil.index',$penjualan->id_penjualan)}}" class="btn btn btn-info hidden-sm-down ">Detil</a> 
+                            <a href="{{route('detil.edit',$detil->id_detil_penjualan)}}" class="btn btn btn-info hidden-sm-down ">Ubah</a> 
                         </td>
                     </tr>
                     @endforeach
+                    <tr>
+                        <td colspan="3" style="text-align:right;">Total</td>
+                        <td colspan="2">Rp. {{number_format($total,0,',','.')}}</td>
+                    </tr>
                 </tbody>
             </table>
             @endif
 
 
         </div>
-        <div>{{$penjualans->links()}}</div>
     </div>
 </div>
 
@@ -98,19 +98,22 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')        
             }    
         });
-        function deleteItem(id_penjualan){
+        function deleteItem(id_detil_penjualan){
+            
+            var id_penjualan=$('#id_penjualan').val();
             var r= confirm("Are u sure to delete?");
             if(r==true){
                 var project_url="{!! URL::to('/')!!}";
                 $.ajax({
-                    url:'/penjualan/'+id_penjualan,
+                    url:'/detil/'+id_detil_penjualan,
                     type:'POST',
                     data:{_method: 'delete' },
                     success: function(result) {
-                        window.location.href = "{{URL::to('/penjualan')}}"
+                        console.log('success');
                     }
                 });
             }
+            
         }
     </script>
 @endsection

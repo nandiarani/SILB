@@ -66,11 +66,11 @@
                             </a>
                             <div class="panel-collapse collapse" id="profile-dropdown">
                                 <ul class="navbar-nav dropdown-menu">
-                                    <li>
+                                    {{-- <li>
                                         <a class="dropdown-item" href="#" onclick="#" style="font-size:15px;">
                                             {{ __('Profile') }}
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();" style="font-size:15px;">
@@ -131,12 +131,12 @@
                                 <span class="hide-menu" style="padding-left:10px;">Modal</span>
                             </a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{route('pegawai.index')}}" aria-expanded="false">
+                        {{-- <li> <a class="waves-effect waves-dark" href="{{route('pegawai.index')}}" aria-expanded="false">
                                 <span><img src="{{asset('assets/icon/users.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>
                                 <span class="hide-menu" style="padding-left:10px;">Pegawai</span>
                             </a>
-                        </li>
+                        </li> --}}
                         @endif
                 </nav>
             </div>

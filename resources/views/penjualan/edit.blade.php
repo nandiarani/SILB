@@ -77,31 +77,11 @@
 @section('js')
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#tanggal').change(function(){
-            if($(this).val()!='')
-            {
-                var date = $(this).val();
-                $.ajax({
-                    url:'/penjualan/fetch/'+date,
-                    type:"GET",
-                    dataType:"json",
-                    success:function(result)
-                    {
-                        $('#harga_per_ekor').empty();
-                        $('#total').val('');
-                        $('#harga_per_ekor').append('<option value="0" selected>-</option>');
-                        for(var i in result){
-                            $('#harga_per_ekor').append('<option value="'+result[i].id_ukuran+'">Rp '+result[i].harga_per_ekor+' - '+result[i].ukuran+' ( '+result[i].size_from_cm+'cm - '+result[i].size_to_cm+' cm)</option>');
-                        }
-                    }
-                });
-            }
-        });
         $('#harga_per_ekor').change(function(){
             var id_ukuran=$(this).find(":selected").val();
             console.log(id_ukuran);
             $.ajax({
-                url:'/penjualan/getdata/'+id_ukuran,
+                url:'/penjualan/getprice/'+id_ukuran,
                 type:"GET",
                 dataType:"json",
                 success:function(result){
@@ -113,11 +93,6 @@
                     }
                 }
             });
-        });
-        $('#jumlah').change(function(){
-            var jumlah=$('#jumlah').val();
-            var harga_satuan=$('#harga_satuan').val();
-            $('#total').val(jumlah*harga_satuan);
         });
         $('#jumlah').keyup(function(){
             var jumlah=$('#jumlah').val();

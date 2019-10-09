@@ -90,8 +90,7 @@
                     url:'/modal/'+id_modal,
                     type:'POST',
                     data:{_method: 'delete' },
-                    success: function(result) {
-                        window.location.href = "{{URL::to('/modal')}}"
+                    success: function(result) { 
                     }
                 });
             }

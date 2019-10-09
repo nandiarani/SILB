@@ -110,7 +110,7 @@ class ModalController extends Controller
         $modal=Modal::find($id_modal);
         $modal->flag_active='0';
         $modal->save();
-        return redirect('modal')->with('error','data modal berhasil dihapus!');
+        return redirect()->back()->with('error','data modal berhasil dihapus!');
 
     }
 

@@ -7,6 +7,8 @@ use Response;
 use App\Model\Trn_Penjualan;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Log;
 use PDF;
 use File;
@@ -30,18 +32,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $dropdownmonth=DB::select("select month(tanggal) as mon, monthname(tanggal) as month from trn_penjualan union DISTINCT select month(tanggal) as mon, monthname(tanggal) as month from trn_pengeluaran where flag_active='1' order by mon");
         $years=DB::select("select year(tanggal) as year from trn_penjualan union DISTINCT select year(tanggal) as year from trn_pengeluaran order by year");
         return view('home',['years'=>$years]);
     }
     public function fetchMonth($year)
     {
         $month=DB::select("select * from 
-                                    (
-                                        (select month(tanggal) as mon, monthname(tanggal) as month from trn_penjualan WHERE flag_active='1' and year(tanggal)=?) 
-                                        union (select month(tanggal) as mon, monthname(tanggal) as month from trn_pengeluaran WHERE flag_active='1' and year(tanggal)=?)
-                                    ) a
-                                    order by a.mon",[$year,$year]);
+                            (
+                                (select month(tanggal) as mon, monthname(tanggal) as month from trn_penjualan WHERE flag_active='1' and year(tanggal)=?) 
+                                union (select month(tanggal) as mon, monthname(tanggal) as month from trn_pengeluaran WHERE flag_active='1' and year(tanggal)=?)
+                            ) a
+                            order by a.mon",[$year,$year]);
         return json_encode($month);
     }
     function fetchChart($month,$year){        
@@ -118,9 +119,17 @@ class HomeController extends Controller
 
     
     public function getDataPenjualan(){
+        // $data=DB::table('trn_penjualan')
+        // ->select(DB::raw("sum(jumlah_ikan) as jumlah_ikan, year(tanggal) year, month(tanggal) month"))
+        // ->whereraw('flag_active = "1" and tanggal < (SELECT date_sub(last_day(CURRENT_DATE), interval 1 month))')
+        // ->groupby('year', 'month')
+        // ->orderby('year','asc')
+        // ->orderby('month','asc')                
+        // ->get();
         $data=DB::table('trn_penjualan')
-        ->select(DB::raw("sum(jumlah_ikan) as jumlah_ikan, year(tanggal) year, month(tanggal) month"))
-        ->whereraw('flag_active = "1" and tanggal < (SELECT date_sub(last_day(CURRENT_DATE), interval 1 month))')
+        ->join('detil_penjualan','trn_penjualan.id_penjualan','=','detil_penjualan.id_penjualan')
+        ->select(DB::raw("sum(detil_penjualan.jumlah_ikan) as jumlah_ikan, year(trn_penjualan.tanggal) year, month(trn_penjualan.tanggal) month"))
+        ->whereraw('trn_penjualan.flag_active = "1" and detil_penjualan.flag_active = "1" and trn_penjualan.tanggal < (SELECT date_sub(last_day(CURRENT_DATE), interval 1 month))')
         ->groupby('year', 'month')
         ->orderby('year','asc')
         ->orderby('month','asc')                
@@ -139,10 +148,16 @@ class HomeController extends Controller
         if ($month==0) {//tahunan
         //-----------------------tabel keuangan---------------------------------------------------
             $penjualan=DB::table('trn_penjualan')
-            ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-            ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
-            ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=?',$year)
+            ->join('detil_penjualan','trn_penjualan.id_penjualan','=','detil_penjualan.id_penjualan')
+            ->join('mst_harga_ikan','detil_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
+            ->select('detil_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','detil_penjualan.subtotal as total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
+            ->whereraw('trn_penjualan.flag_active="1" and detil_penjualan.flag_active="1"and year(trn_penjualan.tanggal)=?',$year)
             ->get();
+            // $penjualan2=DB::table('trn_penjualan')
+            // ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
+            // ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
+            // ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=?',$year)
+            // ->get();
             $pengeluaran=DB::table('trn_pengeluaran')
             ->join('jenis_pengeluaran','trn_pengeluaran.id_jenis_pengeluaran','=','jenis_pengeluaran.id_jenis_pengeluaran')
             ->select('trn_pengeluaran.jumlah','trn_pengeluaran.harga_satuan','trn_pengeluaran.total','trn_pengeluaran.tanggal',DB::raw("'Pengeluaran' as tipe, concat('Pengeluaran untuk ',lower(jenis_pengeluaran.jenis_pengeluaran)) as keterangan"))
@@ -166,10 +181,16 @@ class HomeController extends Controller
         } else {//bulanan  
             //-----------------------tabel keuangan---------------------------------------------------            
             $penjualan=DB::table('trn_penjualan')
-            ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-            ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
-            ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=? and month(trn_penjualan.tanggal)=?',[$year,$month])
+            ->join('detil_penjualan','trn_penjualan.id_penjualan','=','detil_penjualan.id_penjualan')
+            ->join('mst_harga_ikan','detil_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
+            ->select('detil_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','detil_penjualan.subtotal as total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
+            ->whereraw('trn_penjualan.flag_active="1" and detil_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=? and month(trn_penjualan.tanggal)=?',[$year,$month])
             ->get();
+            // $penjualan2=DB::table('trn_penjualan')
+            // ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
+            // ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
+            // ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=? and month(trn_penjualan.tanggal)=?',[$year,$month])
+            // ->get();
             $pengeluaran=DB::table('trn_pengeluaran')
             ->join('jenis_pengeluaran','trn_pengeluaran.id_jenis_pengeluaran','=','jenis_pengeluaran.id_jenis_pengeluaran')
             ->select('trn_pengeluaran.jumlah','trn_pengeluaran.harga_satuan','trn_pengeluaran.total','trn_pengeluaran.tanggal',DB::raw("'Pengeluaran' as tipe, concat('Pengeluaran untuk ',lower(jenis_pengeluaran.jenis_pengeluaran)) as keterangan"))
@@ -192,7 +213,7 @@ class HomeController extends Controller
             $periode=$year.'-'.$month;
             $periode=Carbon::createFromFormat('Y-n', $periode)->format('F Y');
         }
-        
+        // dd($penjualan,$penjualan2);
         //table profit
             //keseluruhan
                 $modal_after=DB::table('modal')
@@ -234,5 +255,14 @@ class HomeController extends Controller
                                                      'today'=>$today->format('j F Y H:i'),
                                                      'periode'=>$periode]);
         return $pdf->stream($title.'.pdf');
+    }
+
+    public function forecast(){
+        
+        $url = 'https://lele-sarima.herokuapp.com/forecastdata'; 
+        $client = new Client();
+        $request = $client->get($url, ['headers' => ['Accept' => 'application/json','Content-type' => 'application/json']]);
+        $response=$request->getBody()->getContents();
+        return $response;
     }
 }

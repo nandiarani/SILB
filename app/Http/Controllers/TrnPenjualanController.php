@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Trn_Penjualan;
 use App\Model\Mst_Harga_Ikan;
+use App\Model\Detil_Penjualan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -25,28 +26,13 @@ class TrnPenjualanController extends Controller
                     ->where('trn_penjualan.flag_active','=','1')
                     ->orderby('tanggal','desc')
                     ->paginate(10);
+        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
         $i=1;
-        return view('penjualan.index',['penjualans'=>$penjualan,'i'=>$i]);
+        return view('penjualan.index',['penjualans'=>$penjualan,'hargas'=>$harga,'i'=>$i]);
     }
     
-    function fetch($date)
-    {
-        $today=Carbon::now()->toDateString();
-        if($date==$today){
-            Log::info('masok');
-            $data=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
-        }
-        else{
-            Log::info('masok 2');
-            $data=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where (? BETWEEN added_at and updated_at) OR (updated_at IS NULL AND added_at<=?)', 
-            [$date,$date]);
-        }
-        return json_encode($data);
-    }
-
-    function getdata($id_ukuran){
-        $data=DB::select('SELECT harga_per_ekor FROM mst_harga_ikan where id_ukuran= :ukuran', 
-                    ['ukuran'=>$id_ukuran]);
+    function getprice($id_ukuran){
+        $data=DB::select('SELECT harga_per_ekor FROM mst_harga_ikan where id_ukuran=?',[$id_ukuran]);
         return json_encode($data);
     }
     /**
@@ -149,5 +135,96 @@ class TrnPenjualanController extends Controller
         $penjualan->flag_active='0';
         $penjualan->save();
         return redirect('/penjualan')->with('error','Transaksi penjualan berhasil dihapus!');
+    }
+
+
+    //Detil Penjualan
+
+    public function indexDetil($id_penjualan)
+    {
+        // find detil penjualan where id penjualan== id_penjualan
+        $penjualan=Trn_Penjualan::find($id_penjualan);
+        $total=$penjualan->total;;
+        $detil=DB::table('detil_penjualan')
+                ->join('mst_harga_ikan','detil_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
+                ->select('mst_harga_ikan.harga_per_ekor','mst_harga_ikan.ukuran','detil_penjualan.jumlah_ikan','detil_penjualan.subtotal','detil_penjualan.id_detil_penjualan')
+                ->where([
+                    ['detil_penjualan.id_penjualan','=',$id_penjualan],
+                    ['detil_penjualan.flag_active','=','1']])
+                ->orderby('detil_penjualan.id_detil_penjualan','asc')
+                ->get();
+        $i=1;
+        // dd($detil);
+        return view('penjualan.detil_penjualan.index',['detils'=>$detil,'total'=>$total,'id_penjualan'=>$id_penjualan,'i'=>$i]);
+    }
+    public function editDetil($id_detil_penjualan)
+    {
+        //hidden id penjualan
+        $detil=Detil_Penjualan::find($id_detil_penjualan);
+        $harga_per_ekor=Mst_Harga_Ikan::find($detil->id_ukuran)->harga_per_ekor;     
+        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=? or id_ukuran=?',['1',$detil->id_ukuran]);
+        return view('penjualan.detil_penjualan.edit',['detil'=>$detil,'hargas'=>$harga,'harga_per_ekor'=>$harga_per_ekor]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Trn_Pengeluaran  $trn_Pengeluaran
+     * @return \Illuminate\Http\Response
+     */
+    public function updateDetil(Request $request)
+    {
+        $detil=Detil_Penjualan::find($request->id_detil_penjualan);
+        $detil->id_ukuran=$request->harga_per_ekor;
+        $detil->jumlah_ikan=$request->jumlah;
+        $detil->subtotal=$request->total;
+        $detil->save();
+        
+        $penjualan=Trn_Penjualan::find($detil->id_penjualan);
+        $penjualan->total=DB::table('Detil_Penjualan')
+                        ->where([['flag_active','=','1'],
+                                ['id_penjualan','=',$penjualan->id_penjualan]])
+                        ->sum('subtotal');
+        $penjualan->save();
+        return redirect()->route('detil.index',['id_penjualan'=>$detil->id_penjualan])->with('info','Detil penjualan berhasil diubah!');
+    }
+    public function createDetil($id_penjualan)
+    {
+        //make hidden id penjualan di form 
+        //return list price
+        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
+        return view('penjualan.detil_penjualan.create',['hargas'=>$harga,'id_penjualan'=>$id_penjualan]);
+    }
+
+    public function storeDetil(Request $request)
+    {
+        $detil= new Detil_Penjualan();
+        $detil->id_penjualan=$request->id_penjualan;
+        $detil->id_ukuran=$request->harga_per_ekor;
+        $detil->jumlah_ikan=$request->jumlah;
+        $detil->subtotal=$request->total;
+        $detil->flag_active='1';
+        $detil->save();
+        $penjualan=Trn_Penjualan::find($request->id_penjualan);
+        $penjualan->total=$penjualan->total+$request->total;
+        $penjualan->save();
+        return redirect()->route('detil.index',['id_penjualan'=>$detil->id_penjualan])->with('success','Detil penjualan berhasil ditambah!');
+    }
+
+    
+
+    public function destroyDetil($id_detil_penjualan)
+    {
+        $detil=Detil_Penjualan::find($id_detil_penjualan);
+        $detil->flag_active='0';
+        $detil->save();
+
+        $penjualan=Trn_Penjualan::find($detil->id_penjualan);
+        $penjualan->total=$penjualan->total-$detil->subtotal;        
+        if($penjualan->total==0)
+            $penjualan->flag_active='0';
+        $penjualan->save();
+        return redirect()->route('detil.index',['id_penjualan'=>$detil->id_penjualan])->with('error','Transaksi penjualan berhasil dihapus!');
     }
 }
