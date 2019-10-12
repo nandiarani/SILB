@@ -89,7 +89,6 @@ class HomeController extends Controller
                     }
                     else {
                         if(!$penjualan->contains('period',$buy->period)){
-    
                             $penjualan->push($buy);
                         }
                     }
@@ -251,10 +250,40 @@ class HomeController extends Controller
 
     public function forecast(){
         
+        return view('forecast');
+    }
+
+    public function fetchForecast(){
+        
         $url = 'https://lele-sarima.herokuapp.com/forecastdata'; 
         $client = new Client();
         $request = $client->get($url, ['headers' => ['Accept' => 'application/json','Content-type' => 'application/json']]);
         $response=$request->getBody()->getContents();
-        return $response;
+
+        $penjualan=DB::table('trn_penjualan')
+        ->join('detil_penjualan','detil_penjualan.id_penjualan','=','trn_penjualan.id_penjualan')
+        ->select(DB::raw('concat(date_format(trn_penjualan.tanggal,"%Y-%m"),"-01") as period, sum(detil_penjualan.jumlah_ikan) as penjualan'))
+        ->whereraw('detil_penjualan.flag_active="1"')
+        ->groupBy(DB::raw('period'))
+        ->orderBy(DB::raw('STR_TO_DATE(period, "%Y-%m-%d")'),'desc')
+        ->limit(12)
+        ->get();
+        $penjualan=$penjualan->reverse()->values();
+        
+        $response=json_decode($response);
+        foreach ($penjualan as $jual) {
+            foreach($response as $resp){
+                if($resp->period===$jual->period){
+                    $jual->mean=$resp->mean;
+                }
+                else {
+                    if(!$penjualan->contains('period',$resp->period)){
+                        $penjualan->push($resp);
+                    }
+                }
+            }
+        }
+        $result=$penjualan;
+        return $result;
     }
 }
