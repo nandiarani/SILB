@@ -32,6 +32,7 @@ return array(
     'App\\Http\\Middleware\\TrustProxies' => $baseDir . '/app/Http/Middleware/TrustProxies.php',
     'App\\Http\\Middleware\\UserActiveMiddleware' => $baseDir . '/app/Http/Middleware/UserActiveMiddleware.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
+    'App\\Model\\Detil_Penjualan' => $baseDir . '/app/Model/Detil_Penjualan.php',
     'App\\Model\\Jenis_Pengeluaran' => $baseDir . '/app/Model/Jenis_Pengeluaran.php',
     'App\\Model\\Modal' => $baseDir . '/app/Model/Modal.php',
     'App\\Model\\Mst_Harga_Ikan' => $baseDir . '/app/Model/Mst_Harga_Ikan.php',

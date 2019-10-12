@@ -18,25 +18,25 @@
 <div class="col-md-7">
     <div class="card">
         <div class="card-body">
-            <form class="form-horizontal form-material" action="{{route('tarif.update',$tarif->id_ukuran)}}" method="POST">
+            <form class="form-horizontal form-material" action="{{route('tarif.update',$tarif->id_harga)}}" method="POST">
                 @csrf
                 <input name="_method" type="hidden" value="PATCH">
                     <div class="form-group">
                             <label class="col-md-12">Ukuran</label>
                             <div class="col-md-12">
-                                <input type="text" name="ukuran" placeholder="" class="form-control form-control-line" value="{{$tarif->ukuran}}" required>
+                                <input type="text" name="ukuran" placeholder="" class="form-control form-control-line" value="{{$ukuran->ukuran}}" required>
                             </div>
                     </div>
                     <div class="form-group">
                             <label class="col-md-12">{{ __('Ukuran dari (cm)') }}</label>
                             <div class="col-md-12">
-                                <input type="number" name="uk_dari" placeholder="" class="form-control form-control-line" value="{{$tarif->size_from_cm}}" required>
+                                <input type="number" name="uk_dari" placeholder="" class="form-control form-control-line" value="{{$ukuran->size_from_cm}}" required>
                             </div>
                     </div>
                     <div class="form-group">
                             <label class="col-md-12">{{ __('Ukuran sampai (cm)') }}</label>
                             <div class="col-md-12">
-                                <input type="number" name="uk_sampai" placeholder="" class="form-control form-control-line" value="{{$tarif->size_to_cm}}" required>
+                                <input type="number" name="uk_sampai" placeholder="" class="form-control form-control-line" value="{{$ukuran->size_to_cm}}" required>
                             </div>
                     </div>
                     <div class="form-group">

@@ -55,9 +55,6 @@
                     <tr>
                         <th>{{'#'}}</th>
                         <th>{{'Tanggal'}}</th>
-                        <th>{{'Jumlah ikan'}}</th>
-                        <th>{{'Ukuran'}}</th>
-                        <th>{{'Harga Per ekor'}}</th>
                         <th>{{'Total'}}</th>
                         
                         <th style="text-align:center;">Action</th>
@@ -68,9 +65,6 @@
                     <tr>
                         <td style="vertical-align:middle;">{{$i++}}</td>
                         <td style="vertical-align:middle;">{{ date('d-m-Y', strtotime($penjualan->tanggal))}}</td>
-                        <td style="vertical-align:middle;">{{$penjualan->jumlah_ikan}}</td>
-                        <td style="vertical-align:middle;">{{$penjualan->ukuran}}</td>
-                        <td style="vertical-align:middle;">Rp. {{number_format($penjualan->harga_per_ekor,0,',','.')}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($penjualan->total,0,',','.')}}</td>
                         <td style="vertical-align:middle; width:20%; text-align:center;">
                             <button type="button" onclick="deleteItem({!!$penjualan->id_penjualan!!})" class="btn btn btn-danger hidden-sm-down" >Delete</button>

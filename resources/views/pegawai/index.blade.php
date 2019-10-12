@@ -54,14 +54,14 @@
                         <td style="vertical-align:middle;">{{$pegawai->name}}</td>
                         <td style="vertical-align:middle;">{{$pegawai->username}}</td>
                         <td style="vertical-align:middle;">{{$pegawai->email}}</td>
-                        <td style="vertical-align:middle;  text-align:center;">
+                        <td style="vertical-align:middle;">
                             @if ($pegawai->flag_active==='1')
                                 Aktif
                             @else
                                 Tidak aktif
                             @endif
                         </td>
-                        <td style="vertical-align:middle; width:20%;">
+                        <td style="vertical-align:middle; width:20%;text-align:center;">
                             @if ($pegawai->flag_active==='0')
                                 <a href="{{route('pegawai.edit',$pegawai->id_user)}}"class="btn btn btn-success hidden-sm-down ">Aktivasi</a>
                             @else

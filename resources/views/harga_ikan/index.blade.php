@@ -71,8 +71,8 @@
                         <td style="vertical-align:middle;">{{$tarif->size_to_cm}}</td>
                         <td style="vertical-align:middle;">Rp. {{number_format($tarif->harga_per_ekor,0,',','.')}}</td>
                         <td style="vertical-align:middle; width:20%; text-align:center;">
-                            <a href="{{route('tarif.edit',$tarif->id_ukuran)}}" class="btn btn btn-info hidden-sm-down ">Edit</a>
-                                <button type="button" onclick="deleteItem({!!$tarif->id_ukuran!!})" class="btn btn btn-danger hidden-sm-down" >Delete</button>
+                            <a href="{{route('tarif.edit',$tarif->id_harga)}}" class="btn btn btn-info hidden-sm-down ">Edit</a>
+                                <button type="button" onclick="deleteItem({!!$tarif->id_harga!!})" class="btn btn btn-danger hidden-sm-down" >Delete</button>
                                 <meta name="csrf-token" content="{{ csrf_token() }}" />   
                         </td>
                     </tr>
@@ -96,12 +96,12 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')        
             }    
         });
-        function deleteItem(id_ukuran){
+        function deleteItem(id_harga){
             var r= confirm("Are u sure to delete?");
             if(r==true){
                 var project_url="{!! URL::to('/')!!}";
                 $.ajax({
-                    url:'/tarif/'+id_ukuran,
+                    url:'/tarif/'+id_harga,
                     type:'POST',
                     data:{_method: 'delete' },
                     success: function(result) {

@@ -118,7 +118,7 @@ class HomeController extends Controller
     }
 
     
-    public function getDataPenjualan(){
+    public function getDataForecast(){
         // $data=DB::table('trn_penjualan')
         // ->select(DB::raw("sum(jumlah_ikan) as jumlah_ikan, year(tanggal) year, month(tanggal) month"))
         // ->whereraw('flag_active = "1" and tanggal < (SELECT date_sub(last_day(CURRENT_DATE), interval 1 month))')
@@ -149,15 +149,11 @@ class HomeController extends Controller
         //-----------------------tabel keuangan---------------------------------------------------
             $penjualan=DB::table('trn_penjualan')
             ->join('detil_penjualan','trn_penjualan.id_penjualan','=','detil_penjualan.id_penjualan')
-            ->join('mst_harga_ikan','detil_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-            ->select('detil_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','detil_penjualan.subtotal as total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
+            ->join('mst_harga_ikan','detil_penjualan.id_harga','=','mst_harga_ikan.id_harga')
+            ->join('ukuran','ukuran.id_ukuran','=','mst_harga_ikan.id_ukuran')
+            ->select('detil_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','detil_penjualan.subtotal as total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(ukuran.ukuran),' (',ukuran.size_from_cm,'cm-',ukuran.size_to_cm,'cm)') as keterangan"))
             ->whereraw('trn_penjualan.flag_active="1" and detil_penjualan.flag_active="1"and year(trn_penjualan.tanggal)=?',$year)
             ->get();
-            // $penjualan2=DB::table('trn_penjualan')
-            // ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-            // ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
-            // ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=?',$year)
-            // ->get();
             $pengeluaran=DB::table('trn_pengeluaran')
             ->join('jenis_pengeluaran','trn_pengeluaran.id_jenis_pengeluaran','=','jenis_pengeluaran.id_jenis_pengeluaran')
             ->select('trn_pengeluaran.jumlah','trn_pengeluaran.harga_satuan','trn_pengeluaran.total','trn_pengeluaran.tanggal',DB::raw("'Pengeluaran' as tipe, concat('Pengeluaran untuk ',lower(jenis_pengeluaran.jenis_pengeluaran)) as keterangan"))
@@ -182,15 +178,11 @@ class HomeController extends Controller
             //-----------------------tabel keuangan---------------------------------------------------            
             $penjualan=DB::table('trn_penjualan')
             ->join('detil_penjualan','trn_penjualan.id_penjualan','=','detil_penjualan.id_penjualan')
-            ->join('mst_harga_ikan','detil_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-            ->select('detil_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','detil_penjualan.subtotal as total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
+            ->join('mst_harga_ikan','detil_penjualan.id_harga','=','mst_harga_ikan.id_harga')
+            ->join('ukuran','ukuran.id_ukuran','=','mst_harga_ikan.id_ukuran')
+            ->select('detil_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','detil_penjualan.subtotal as total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(ukuran.ukuran),' (',ukuran.size_from_cm,'cm-',ukuran.size_to_cm,'cm)') as keterangan"))
             ->whereraw('trn_penjualan.flag_active="1" and detil_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=? and month(trn_penjualan.tanggal)=?',[$year,$month])
             ->get();
-            // $penjualan2=DB::table('trn_penjualan')
-            // ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-            // ->select('trn_penjualan.jumlah_ikan as jumlah','mst_harga_ikan.harga_per_ekor AS harga_satuan','trn_penjualan.total','trn_penjualan.tanggal',DB::raw("'Penjualan' as tipe, concat('Ukuran ',lower(mst_harga_ikan.ukuran),' (',mst_harga_ikan.size_from_cm,'cm-',mst_harga_ikan.size_to_cm,'cm)') as keterangan"))
-            // ->whereraw('trn_penjualan.flag_active="1" and year(trn_penjualan.tanggal)=? and month(trn_penjualan.tanggal)=?',[$year,$month])
-            // ->get();
             $pengeluaran=DB::table('trn_pengeluaran')
             ->join('jenis_pengeluaran','trn_pengeluaran.id_jenis_pengeluaran','=','jenis_pengeluaran.id_jenis_pengeluaran')
             ->select('trn_pengeluaran.jumlah','trn_pengeluaran.harga_satuan','trn_pengeluaran.total','trn_pengeluaran.tanggal',DB::raw("'Pengeluaran' as tipe, concat('Pengeluaran untuk ',lower(jenis_pengeluaran.jenis_pengeluaran)) as keterangan"))

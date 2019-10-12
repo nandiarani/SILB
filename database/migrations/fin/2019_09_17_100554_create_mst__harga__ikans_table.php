@@ -14,10 +14,8 @@ class CreateMstHargaIkansTable extends Migration
     public function up()
     {
         Schema::create('mst_harga_ikan', function (Blueprint $table) {
-            $table->increments('id_ukuran');
-            $table->string('ukuran')->nullable();
-            $table->integer('size_from_cm')->unsigned()->nullable();
-            $table->integer('size_to_cm')->unsigned()->nullable();
+            $table->increments('id_harga');
+            $table->integer('id_ukuran')->unsigned();
             $table->float('harga_per_ekor',20,2)->nullable();
             $table->date('added_at')->nullable();
             $table->integer('added_by')->nullable();            

@@ -27,10 +27,10 @@
                         <select name="harga_per_ekor" id="harga_per_ekor" class="bootstrap-select form-control form-control-line">
                                 <option value="0">-</option>
                             @foreach ($hargas as $harga)
-                                @if ($harga->id_ukuran===$detil->id_ukuran)
-                                    <option selected value="{{$harga->id_ukuran}}">Rp {{$harga->harga_per_ekor}} - {{$harga->ukuran}} ({{$harga->size_from_cm}} cm - {{$harga->size_to_cm}}cm)</option>
+                                @if ($harga->id_harga===$detil->id_harga)
+                                    <option selected value="{{$harga->id_harga}}">Rp {{$harga->harga_per_ekor}} - {{$harga->ukuran}} ({{$harga->size_from_cm}} cm - {{$harga->size_to_cm}}cm)</option>
                                 @else
-                                    <option value="{{$harga->id_ukuran}}">Rp {{$harga->harga_per_ekor}} - {{$harga->ukuran}} ({{$harga->size_from_cm}} cm - {{$harga->size_to_cm}}cm)</option>
+                                    <option value="{{$harga->id_harga}}">Rp {{$harga->harga_per_ekor}} - {{$harga->ukuran}} ({{$harga->size_from_cm}} cm - {{$harga->size_to_cm}}cm)</option>
                                 @endif
                             @endforeach
                         </select>

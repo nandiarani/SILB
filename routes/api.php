@@ -17,5 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/dataRawForecast','HomeController@getDataPenjualan');
+Route::get('/dataRawForecast','HomeController@getDataForecast');
 Route::get('/apiReport','HomeController@report');

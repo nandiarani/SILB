@@ -22,11 +22,11 @@ class TrnPenjualanController extends Controller
     public function index()
     {
         $penjualan=DB::table('trn_penjualan')
-                    ->join('mst_harga_ikan','trn_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
+                    ->select('id_penjualan','total','tanggal')
                     ->where('trn_penjualan.flag_active','=','1')
                     ->orderby('tanggal','desc')
                     ->paginate(10);
-        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
+        $harga=DB::select('SELECT hrg.id_harga, uk.ukuran, hrg.harga_per_ekor, uk.size_from_cm, uk.size_to_cm FROM mst_harga_ikan hrg join ukuran uk on hrg.id_ukuran=uk.id_ukuran where hrg.flag_active=? and uk.flag_active=?',['1','1']);
         $i=1;
         return view('penjualan.index',['penjualans'=>$penjualan,'hargas'=>$harga,'i'=>$i]);
     }
@@ -43,8 +43,7 @@ class TrnPenjualanController extends Controller
     public function create()
     {
         $today=Carbon::now()->toDateString();
-        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
-        
+        $harga=DB::select('SELECT hrg.id_harga, uk.ukuran, hrg.harga_per_ekor, uk.size_from_cm, uk.size_to_cm FROM mst_harga_ikan hrg join ukuran uk on hrg.id_ukuran=uk.id_ukuran where hrg.flag_active=? and uk.flag_active=?',['1','1']);
         return view('penjualan.create',['today'=>$today,'hargas'=>$harga]);
     }
 
@@ -146,8 +145,9 @@ class TrnPenjualanController extends Controller
         $penjualan=Trn_Penjualan::find($id_penjualan);
         $total=$penjualan->total;;
         $detil=DB::table('detil_penjualan')
-                ->join('mst_harga_ikan','detil_penjualan.id_ukuran','=','mst_harga_ikan.id_ukuran')
-                ->select('mst_harga_ikan.harga_per_ekor','mst_harga_ikan.ukuran','detil_penjualan.jumlah_ikan','detil_penjualan.subtotal','detil_penjualan.id_detil_penjualan')
+                ->join('mst_harga_ikan','detil_penjualan.id_harga','=','mst_harga_ikan.id_harga')
+                ->join('ukuran','ukuran.id_ukuran','=','mst_harga_ikan.id_ukuran')
+                ->select('mst_harga_ikan.harga_per_ekor','ukuran.ukuran','detil_penjualan.jumlah_ikan','detil_penjualan.subtotal','detil_penjualan.id_detil_penjualan')
                 ->where([
                     ['detil_penjualan.id_penjualan','=',$id_penjualan],
                     ['detil_penjualan.flag_active','=','1']])
@@ -161,8 +161,8 @@ class TrnPenjualanController extends Controller
     {
         //hidden id penjualan
         $detil=Detil_Penjualan::find($id_detil_penjualan);
-        $harga_per_ekor=Mst_Harga_Ikan::find($detil->id_ukuran)->harga_per_ekor;     
-        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=? or id_ukuran=?',['1',$detil->id_ukuran]);
+        $harga_per_ekor=Mst_Harga_Ikan::find($detil->id_harga)->harga_per_ekor;     
+        $harga=DB::select('SELECT hrg.id_harga, uk.ukuran, hrg.harga_per_ekor, uk.size_from_cm, uk.size_to_cm FROM mst_harga_ikan hrg join ukuran uk on hrg.id_ukuran=uk.id_ukuran where hrg.flag_active=? and uk.flag_active=?',['1','1']);
         return view('penjualan.detil_penjualan.edit',['detil'=>$detil,'hargas'=>$harga,'harga_per_ekor'=>$harga_per_ekor]);
     }
 
@@ -176,7 +176,7 @@ class TrnPenjualanController extends Controller
     public function updateDetil(Request $request)
     {
         $detil=Detil_Penjualan::find($request->id_detil_penjualan);
-        $detil->id_ukuran=$request->harga_per_ekor;
+        $detil->id_harga=$request->harga_per_ekor;
         $detil->jumlah_ikan=$request->jumlah;
         $detil->subtotal=$request->total;
         $detil->save();
@@ -191,9 +191,7 @@ class TrnPenjualanController extends Controller
     }
     public function createDetil($id_penjualan)
     {
-        //make hidden id penjualan di form 
-        //return list price
-        $harga=DB::select('SELECT id_ukuran, ukuran, harga_per_ekor, size_from_cm, size_to_cm FROM mst_harga_ikan where flag_active=?',['1']);
+        $harga=DB::select('SELECT hrg.id_harga, uk.ukuran, hrg.harga_per_ekor, uk.size_from_cm, uk.size_to_cm FROM mst_harga_ikan hrg join ukuran uk on hrg.id_ukuran=uk.id_ukuran where hrg.flag_active=? and uk.flag_active=?',['1','1']);
         return view('penjualan.detil_penjualan.create',['hargas'=>$harga,'id_penjualan'=>$id_penjualan]);
     }
 
@@ -201,7 +199,7 @@ class TrnPenjualanController extends Controller
     {
         $detil= new Detil_Penjualan();
         $detil->id_penjualan=$request->id_penjualan;
-        $detil->id_ukuran=$request->harga_per_ekor;
+        $detil->id_harga=$request->harga_per_ekor;
         $detil->jumlah_ikan=$request->jumlah;
         $detil->subtotal=$request->total;
         $detil->flag_active='1';

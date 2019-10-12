@@ -19,7 +19,11 @@ class CreateDetilPenjualan extends Migration
             $table->integer('id_ukuran')->unsigned();
             $table->integer('jumlah_ikan')->unsigned();
             $table->float('subtotal',20,2)->unsigned();
-            $table->enum('flag_active', ['0', '1']); 
+            $table->dateTime('added_at')->nullable();
+            $table->integer('added_by')->nullable();
+            $table->dateTime('updated_at')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->enum('flag_active', ['0', '1']);
         });
     }
 

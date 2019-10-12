@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes(['verify'=>true]);
 
 Route::get('home', 'HomeController@index')->name('home')->middleware(['auth','verified','activated']);
-Route::get('forecast','HomeController@forecast');
+Route::get('forecast','HomeController@forecast')->name('home.forecast');
 Route::post('report', 'HomeController@report')->name('reportDetail');//->middleware(['auth','verified','activated']);
 Route::get('fetchChart/{month}/{year?}', 'HomeController@fetchChart');//->middleware(['auth','verified','activated']);
 Route::get('fetchMonth/{year}','HomeController@fetchMonth');

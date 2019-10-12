@@ -131,12 +131,12 @@
                                 <span class="hide-menu" style="padding-left:10px;">Modal</span>
                             </a>
                         </li>
-                        {{-- <li> <a class="waves-effect waves-dark" href="{{route('pegawai.index')}}" aria-expanded="false">
+                        <li> <a class="waves-effect waves-dark" href="{{route('pegawai.index')}}" aria-expanded="false">
                                 <span><img src="{{asset('assets/icon/users.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>
                                 <span class="hide-menu" style="padding-left:10px;">Pegawai</span>
                             </a>
-                        </li> --}}
+                        </li>
                         @endif
                 </nav>
             </div>

@@ -42,8 +42,9 @@
                                         <select name="month" id="month" class="form-control form-control-line" style="visibility: hidden;">
                                         </select>
                                     </div>
-                                    <div class="col-sm-4" style="padding-right:0px;">
-                                        <button class="btn waves-effect waves-light btn btn-primary pull-right hidden-sm-down" type="submit">Detail Laporan</button>
+                                    <div class="col-sm-4 " style="padding-right:0px;margin-right:0px;">
+                                        <button class="btn waves-effect waves-light btn btn-primary hidden-sm-down" type="submit">Detail Laporan</button>
+                                        <a href="{{route('home.forecast')}}" class="btn btn btn-primary hidden-sm-down" style="margin-right:10px;">Forecast</a>
                                     </div>
                                 </div>
                         </div>
