@@ -41,7 +41,72 @@
             success: function(result) {
                 Morris.Area({
                     element: 'forecast-chart',
-                    data: result,
+                    data: [
+                        {
+                          "period": "2018-10-01",
+                          "penjualan": 29400,
+                          "mean":27268
+                        },
+                        {
+                          "period": "2018-11-01",
+                          "penjualan": 33500,
+                          "mean":27268
+                        },
+                        {
+                          "period": "2018-12-01",
+                          "penjualan": 39000,
+                          "mean":27268
+                        },
+                        {
+                          "period": "2019-01-01",
+                          "penjualan": 43900,
+                          "mean":27268
+                        },
+                        {
+                          "period": "2019-02-01",
+                          "penjualan": 43000,
+                          "mean":27268
+                        },
+                        {
+                          "period": "2019-03-01",
+                          "penjualan": 37700,
+                          "mean":27268
+                        },
+                        {
+                          "period": "2019-04-01",
+                          "penjualan": 34200,
+                          "mean":27268
+                        },
+                        {
+                          "period": "2019-05-01",
+                          "penjualan": 31850,
+                          "mean":27268
+                        },
+                        {
+                          "period": "2019-06-01",
+                          "penjualan": 28500,
+                          "mean":27268
+                        },
+                        {
+                          "period": "2019-07-01",
+                          "penjualan": 27900,
+                          "mean": 27268
+                        },
+                        {
+                          "period": "2019-08-01",
+                          "penjualan": 31100,
+                          "mean": 28665
+                        },
+                        {
+                          "period": "2019-09-01",
+                          "penjualan": 35300,
+                          "mean": 33475
+                        },
+                        {
+                          "period": "2019-10-01",
+                          "mean": 34884
+                        }
+                      ],
                     xkey: "period",
                     ykeys: ["mean", "penjualan"],
                     labels: ['Peramalan', 'Penjualan'],

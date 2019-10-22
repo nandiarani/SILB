@@ -35,9 +35,9 @@
                     <a class="navbar-brand" href="#">
                         <img src="{{asset('assets/image/logo-icon.png')}}" alt="homepage" class="dark-logo" />
                         <img src="{{asset('assets/image/logo-light-icon.png')}}" alt="homepage" class="light-logo" />
-                        <img src="{{asset('assets/image/logo-text.png')}}" alt="homepage" class="dark-logo" />
-                        <img src="{{asset('assets/image/logo-light-text.png')}}" class="light-logo"
-                            alt="homepage" /></span>
+                        {{--  <img src="{{asset('assets/image/logo-text.png')}}" alt="homepage" class="dark-logo" />
+                        <img src="{{asset('assets/image/logo-light-text.png')}}" class="light-logo"  --}}
+                            SITRAN
                     </a>
                 </div>
                 <div class="navbar-collapse">

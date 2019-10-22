@@ -32,7 +32,7 @@ class TrnPenjualanController extends Controller
     }
     
     function getprice($id_ukuran){
-        $data=DB::select('SELECT harga_per_ekor FROM mst_harga_ikan where id_ukuran=?',[$id_ukuran]);
+        $data=DB::select('SELECT harga_per_ekor FROM mst_harga_ikan where id_harga=?',[$id_ukuran]);
         return json_encode($data);
     }
     /**
@@ -47,6 +47,7 @@ class TrnPenjualanController extends Controller
         return view('penjualan.create',['today'=>$today,'hargas'=>$harga]);
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -55,15 +56,27 @@ class TrnPenjualanController extends Controller
      */
     public function store(Request $request)
     {
+        $countitem=count($request->harga_per_ekor);
         $penjualan = new Trn_Penjualan();
-        $penjualan->jumlah_ikan=request('jumlah');
-        $penjualan->id_ukuran=request('harga_per_ekor');
         $penjualan->total=request('total');
         $penjualan->tanggal=request('tanggal');
         $penjualan->added_at=Carbon::now()->toDateTimeString();
         $penjualan->added_by=Auth::user()->id_user;
         $penjualan->flag_active='1';
         $penjualan->save();
+        for($i=0;$i<$countitem;$i++)
+        {
+            $item= new Detil_Penjualan();
+            $item->id_penjualan=$penjualan->id_penjualan;
+            $item->id_harga=$request->get('harga_per_ekor')[$i];
+            $item->jumlah_ikan=$request->get('jumlah')[$i];
+            $harga=Mst_Harga_Ikan::find($item->id_harga)->harga_per_ekor;
+            $item->subtotal=$item->jumlah_ikan*$harga;
+            $item->added_at=Carbon::now()->toDateTimeString();
+            $item->added_by=Auth::user()->id_user;
+            $item->flag_active='1';
+            $item->save();
+        }
         return redirect('/penjualan')->with('success','Transaksi penjualan berhasil dimasukkan!');
     }
 
@@ -133,6 +146,7 @@ class TrnPenjualanController extends Controller
         $penjualan=Trn_Penjualan::find($id_penjualan);
         $penjualan->flag_active='0';
         $penjualan->save();
+        $items=DB::table('detil_penjualan')->where('id_penjualan','=',$id_penjualan)->update(['flag_active' =>'0']);
         return redirect('/penjualan')->with('error','Transaksi penjualan berhasil dihapus!');
     }
 
@@ -155,7 +169,7 @@ class TrnPenjualanController extends Controller
                 ->get();
         $i=1;
         // dd($detil);
-        return view('penjualan.detil_penjualan.index',['detils'=>$detil,'total'=>$total,'id_penjualan'=>$id_penjualan,'i'=>$i]);
+        return view('penjualan.detil_penjualan.index',['detils'=>$detil,'total'=>$total,'penjualan'=>$penjualan,'i'=>$i]);
     }
     public function editDetil($id_detil_penjualan)
     {

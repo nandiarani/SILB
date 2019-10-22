@@ -22,7 +22,18 @@
         <div class="col md-12"  style="border-bottom:2px solid #d5dae2;margin-bottom:15px;">
             <h4 class="card-title">Pengelolaan Detil Penjualan</h4>
         </div>
-        <a href="{{route('detil.create',$id_penjualan)}}" class="btn waves-effect waves-light btn btn-success pull-right hidden-sm-down">Tambah</a>
+        <div class="col md-6">
+            <p>
+                Id: {{$penjualan->id_penjualan}}
+                <br>
+                Tanggal : {{$penjualan->tanggal}}
+            </p> 
+        </div>
+        <div class="col md-6">
+            <a href="{{route('detil.create',$penjualan->id_penjualan)}}" class="btn waves-effect waves-light btn btn-success pull-right hidden-sm-down">Tambah Item</a>
+            <a href="{{route('detil.create',$penjualan->id_penjualan)}}" class="btn waves-effect waves-light btn btn-info hidden-sm-down" >Ubah tanggal</a>
+            
+        </div>
         <div class="table-responsive">
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success alert-block">
@@ -50,7 +61,7 @@
                 <p class="text-muted" style="font-size:200%;">Data kosong :(</p>
             </div>
             @else
-            <input type="hidden" value="{{$id_penjualan}}" id="id_penjualan">
+            <input type="hidden" value="{{$penjualan->id_penjualan}}" id="id_penjualan">
             <table class="table">
                 <thead>
                     <tr>

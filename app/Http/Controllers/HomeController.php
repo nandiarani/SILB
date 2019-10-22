@@ -118,13 +118,6 @@ class HomeController extends Controller
 
     
     public function getDataForecast(){
-        // $data=DB::table('trn_penjualan')
-        // ->select(DB::raw("sum(jumlah_ikan) as jumlah_ikan, year(tanggal) year, month(tanggal) month"))
-        // ->whereraw('flag_active = "1" and tanggal < (SELECT date_sub(last_day(CURRENT_DATE), interval 1 month))')
-        // ->groupby('year', 'month')
-        // ->orderby('year','asc')
-        // ->orderby('month','asc')                
-        // ->get();
         $data=DB::table('trn_penjualan')
         ->join('detil_penjualan','trn_penjualan.id_penjualan','=','detil_penjualan.id_penjualan')
         ->select(DB::raw("sum(detil_penjualan.jumlah_ikan) as jumlah_ikan, year(trn_penjualan.tanggal) year, month(trn_penjualan.tanggal) month"))
@@ -249,6 +242,7 @@ class HomeController extends Controller
     }
 
     public function forecast(){
+        
         
         return view('forecast');
     }

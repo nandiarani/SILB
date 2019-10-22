@@ -31,7 +31,6 @@ Route::resource('pegawai', 'PegawaiController')->middleware(['auth','owner']);
 Route::resource('pengeluaran', 'TrnPengeluaranController')->middleware('auth');
 Route::resource('penjualan', 'TrnPenjualanController')->middleware('auth');
 
-Route::get('penjualan/fetch/{date}','TrnPenjualanController@fetch');
 Route::get('penjualan/getprice/{id_ukuran}','TrnPenjualanController@getprice');
     
 Route::get('penjualan/detil/{id}','TrnPenjualanController@indexDetil')->name('detil.index')->middleware('auth');
