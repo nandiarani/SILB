@@ -20,6 +20,7 @@ Auth::routes(['verify'=>true]);
 Route::get('home', 'HomeController@index')->name('home')->middleware(['auth','verified','activated']);
 Route::get('forecast','HomeController@forecast')->name('home.forecast');
 Route::get('fetchForecast','HomeController@fetchForecast');
+Route::get('test','HomeController@test');
 Route::post('report', 'HomeController@report')->name('reportDetail');//->middleware(['auth','verified','activated']);
 Route::get('fetchChart/{month}/{year?}', 'HomeController@fetchChart');//->middleware(['auth','verified','activated']);
 Route::get('fetchMonth/{year}','HomeController@fetchMonth');
@@ -31,6 +32,7 @@ Route::resource('pegawai', 'PegawaiController')->middleware(['auth','owner']);
 Route::resource('pengeluaran', 'TrnPengeluaranController')->middleware('auth');
 Route::resource('penjualan', 'TrnPenjualanController')->middleware('auth');
 
+Route::post('penjualan/updateDate','TrnPenjualanController@updateTanggal');
 Route::get('penjualan/getprice/{id_ukuran}','TrnPenjualanController@getprice');
     
 Route::get('penjualan/detil/{id}','TrnPenjualanController@indexDetil')->name('detil.index')->middleware('auth');

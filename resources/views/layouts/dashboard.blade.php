@@ -8,7 +8,7 @@
     @yield('title')
 
     {{-- icon --}}
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('../assets/image/favicon.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('../assets/image/logo-icon.png')}}">
 
     {{-- Style --}}
     <link href="{{asset('../assets/node_modules/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -33,11 +33,9 @@
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">
-                        <img src="{{asset('assets/image/logo-icon.png')}}" alt="homepage" class="dark-logo" />
+                        <img src="{{asset('assets/image/logo-icon.png')}}" alt="homepage" class="dark-logo" style="width:60px;height:60px;"/>
                         <img src="{{asset('assets/image/logo-light-icon.png')}}" alt="homepage" class="light-logo" />
-                        {{--  <img src="{{asset('assets/image/logo-text.png')}}" alt="homepage" class="dark-logo" />
-                        <img src="{{asset('assets/image/logo-light-text.png')}}" class="light-logo"  --}}
-                            SITRAN
+                        SITRAN
                     </a>
                 </div>
                 <div class="navbar-collapse">
@@ -162,11 +160,14 @@
         <script src="{{asset('js/waves.js')}}"></script>
         <script src="{{asset('js/sidebarmenu.js')}}"></script>
         <script src="{{asset('js/custom.min.js')}}"></script>
+        <script src="{{asset('js/custom.js')}}"></script>
         <script src="{{asset('../assets/node_modules/raphael/raphael-min.js')}}"></script>
         <script src="{{asset('../assets/node_modules/morrisjs/morris.min.js')}}"></script>
         <script src="{{asset('../assets/node_modules/d3/d3.min.js')}}"></script>
         <script src="{{asset('../assets/node_modules/c3-master/c3.min.js')}}"></script>
         <script src="{{asset('js/dashboard1.js')}}"></script>
+        <script src="{{asset('js/Chart.min.js')}}"></script>
+        <script src="{{asset('js/utils.js')}}"></script>
         @yield('js')
 </body>
 

@@ -122,17 +122,15 @@ class TrnPenjualanController extends Controller
      * @param  \App\Trn_Penjualan  $trn_Penjualan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id_penjualan)
+    public function updateTanggal(Request $request)
     {
-        $penjualan = Trn_Penjualan::find($id_penjualan);
-        $penjualan->jumlah_ikan=request('jumlah');
-        $penjualan->id_ukuran=request('harga_per_ekor');
-        $penjualan->total=request('total');
-        $penjualan->tanggal=request('tanggal');
+        // dd($request);
+        $penjualan = Trn_Penjualan::find($request->id_penjualan);
+        $penjualan->tanggal=$request->tanggal;
         $penjualan->updated_at=Carbon::now()->toDateTimeString();
         $penjualan->updated_by=Auth::user()->id_user;
         $penjualan->save();
-        return redirect('/penjualan')->with('info','Transaksi penjualan berhasil diperbaharui!');
+        return redirect()->route('detil.index',['id_penjualan'=>$request->id_penjualan])->with('info','Tanggal penjualan berhasil diubah!');
     }
 
     /**
