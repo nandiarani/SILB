@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Log;
+use Auth;
 use PDF;
 use File;
 
@@ -32,6 +33,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if(Auth::user()->role=='employee'){
+            return redirect()->route('penjualan.index');
+        }
         $years=DB::select("select year(tanggal) as year from trn_penjualan union DISTINCT select year(tanggal) as year from trn_pengeluaran order by year");
         return view('home',['years'=>$years]);
     }
@@ -248,7 +252,8 @@ class HomeController extends Controller
     }
 
     public function fetchForecast(){
-        $url = 'https://lele-sarima.herokuapp.com/forecastdata'; 
+        // $url = 'https://lele-sarima.herokuapp.com/forecastdata'; 
+        $url='http://127.0.0.1:5000/forecastdata';
         $client = new Client();
         $request = $client->get($url, ['headers' => ['Accept' => 'application/json','Content-type' => 'application/json']]);
         $response=$request->getBody()->getContents();
@@ -303,61 +308,5 @@ class HomeController extends Controller
         }
         $result=[$labels,$forecast,$sell];
         return $result;
-    }
-
-    public function test(){
-        $url = 'https://lele-sarima.herokuapp.com/forecastdata'; 
-        $client = new Client();
-        $request = $client->get($url, ['headers' => ['Accept' => 'application/json','Content-type' => 'application/json']]);
-        $response=$request->getBody()->getContents();
-
-        $penjualan=DB::table('trn_penjualan')
-        ->join('detil_penjualan','detil_penjualan.id_penjualan','=','trn_penjualan.id_penjualan')
-        ->select(DB::raw('concat(date_format(trn_penjualan.tanggal,"%Y-%m"),"-01") as period, sum(detil_penjualan.jumlah_ikan) as penjualan'))
-        ->whereraw('detil_penjualan.flag_active="1"')
-        ->groupBy(DB::raw('period'))
-        ->orderBy(DB::raw('STR_TO_DATE(period, "%Y-%m-%d")'),'desc')
-        ->limit(12)
-        ->get();
-        $penjualan=$penjualan->reverse()->values();
-        
-        $response=json_decode($response);
-        foreach ($penjualan as $jual) {
-            foreach($response as $resp){
-                if($resp->period===$jual->period){
-                    $jual->mean=$resp->mean;
-                }
-                else {
-                    if(!$penjualan->contains('period',$resp->period)){
-                        $penjualan->push($resp);
-                    }
-                }
-            }
-        }
-        $sum=$penjualan;
-        $labels=[];
-        $forecast=[];
-        $sell=[];
-        foreach($sum as $data){
-            array_push($labels,$data->period);
-        }
-        foreach($sum as $data){
-            if(property_exists($data,"mean")){
-                array_push($forecast,$data->mean);
-            }
-            else{
-                array_push($forecast,null);
-            }
-        }
-        foreach($sum as $data){
-            if(property_exists($data,"penjualan")){
-                array_push($sell,$data->penjualan);
-            }
-            else{
-                array_push($sell,null);
-            }
-        }
-        $result=[$labels,$forecast,$sell];
-        return json_encode($result);
     }
 }

@@ -79,14 +79,14 @@
                                   display: true,
                                   scaleLabel: {
                                       display: true,
-                                      labelString: 'Month'
+                                      labelString: 'Bulan'
                                   }
                               }],
                               yAxes: [{
                                   display: true,
                                   scaleLabel: {
                                       display: true,
-                                      labelString: 'Value'
+                                      labelString: 'Penjualan'
                                   }
                               }]
                           }

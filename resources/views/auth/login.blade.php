@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 @section('title')
-    <title>SILBan Login</title>
+    <title>SITRAN login</title>
 @endsection
 @section('contents')
 <div class="col-md-8">
@@ -55,7 +55,7 @@
                 <div class="card-body text-center">
                     <div>
                         <h2>Sign up</h2>
-                        <p style="padding-top:10px;">Selamat datang di SITran. Silakan register untuk bisa masuk ke sistem.</p>
+                        <p style="padding-top:10px;">Selamat datang di SITRAN. Silakan register dan hubungi admin untuk bisa masuk ke sistem.</p>
                         <a class="btn btn-primary active mt-3"
                             href="{{ route('register') }}">{{ __('Register') }}</a>
                     </div>

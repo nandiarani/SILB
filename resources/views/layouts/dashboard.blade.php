@@ -91,12 +91,15 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
+                        
+                            @if (Auth::user()->role==='owner')
                         <li> <a class="waves-effect waves-dark" href="/home" aria-expanded="false">
                                 <span><img src="{{asset('assets/icon/research.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>
                                 <span class="hide-menu" style="padding-left:10px;">Dashboard</span>
                             </a>
                         </li>
+                        @endif
                         <li> <a class="waves-effect waves-dark" href="{{route('penjualan.index')}}" aria-expanded="false">
                                 <span><img src="{{asset('assets/icon/sell.png')}}" style="height:33px;width:33px;"
                                         alt=""></span>

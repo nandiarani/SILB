@@ -24,13 +24,13 @@
         <form action="" id="deleteForm" method="POST">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="vcenter">Modal Heading</h4>
+                    <h4 class="modal-title" id="vcenter">Hapus data</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
                     {{ csrf_field() }}
                     {{ method_field('DELETE') }}
-                    <p class="text-center">Are You Sure Want To Delete ?</p>
+                    <p class="text-center">Anda yakin untuk menghapus data?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger waves-effect" data-dismiss="modal"
@@ -48,7 +48,7 @@
                 {{ csrf_field()}}
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="vcenter">Modal Heading</h4>
+                    <h4 class="modal-title" id="vcenter">Ubah tanggal</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
